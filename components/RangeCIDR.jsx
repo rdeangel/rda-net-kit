@@ -37,7 +37,7 @@ function RangeCIDR() {
           ))}
         </div>
         {mode === 'range2cidr' ? (
-          <div className="two-col">
+          <div className="two-col grid-mobile-1">
             <div className="field"><label className="label">Start IP</label>
               <input className="input" value={start} onChange={e => setStart(e.target.value)} placeholder="10.0.0.0" /></div>
             <div className="field"><label className="label">End IP</label>
@@ -56,7 +56,7 @@ function RangeCIDR() {
           {result.mode === 'range2cidr' ? (
             <>
               <div className="card-title">CIDR Blocks ({result.count})</div>
-              <div className="table-wrap">
+              <div className="table-wrap hide-mobile">
                 <table>
                   <thead><tr><th>#</th><th>CIDR</th><th>Network</th><th>Broadcast</th><th>Hosts</th><th></th></tr></thead>
                   <tbody>
@@ -77,6 +77,32 @@ function RangeCIDR() {
                   </tbody>
                 </table>
               </div>
+              {/* Mobile View */}
+              <div className="show-mobile mobile-cards">
+                {result.cidrs.map((cidr, i) => {
+                  const c = IPv4.parseCIDR(cidr);
+                  const sn = IPv4.subnet(c.ip, c.prefix);
+                  return (
+                    <div key={i} className="mobile-card">
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">Block {i+1}</span>
+                        <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{cidr}</span>
+                      </div>
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">Range</span>
+                        <span className="mobile-card-value">{sn.networkStr} - {sn.broadcastStr}</span>
+                      </div>
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">Hosts</span>
+                        <span className="mobile-card-value" style={{color:'var(--green)'}}>{sn.hostCount}</span>
+                      </div>
+                      <div style={{marginTop:8, display:'flex', justifyContent:'flex-end'}}>
+                        <CopyBtn text={cidr} label="Copy CIDR" />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
               <div className="btn-row">
                 <button className="btn btn-ghost btn-sm" onClick={() => exportCSV(result.cidrs.map((c,i)=>({index:i+1,cidr:c})),'range-cidrs.csv')}>Export CSV</button>
                 <button className="btn btn-ghost btn-sm" onClick={() => navigator.clipboard.writeText(result.cidrs.join('\n'))}>Copy All</button>
@@ -85,7 +111,7 @@ function RangeCIDR() {
           ) : (
             <>
               <div className="card-title">Range Details</div>
-              <div className="result-grid">
+              <div className="result-grid grid-mobile-1">
                 <ResultItem label="Start (Network)" value={result.start} accent />
                 <ResultItem label="End (Broadcast)" value={result.end} red />
                 <ResultItem label="First Host" value={result.firstHost} green />

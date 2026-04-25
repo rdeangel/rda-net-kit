@@ -6,6 +6,8 @@
   A browser-based network engineering toolkit with IPv4/IPv6 subnetting, multicast, routing, switching, diagnostics, and more. Built with React and runs entirely client-side.
 </div>
 
+> **Disclaimer:** The reference content, protocol summaries, and tool outputs in this toolkit were researched and authored with the assistance of AI (large language models). I've reviewed as much as I could, but not everything — LLMs can occasionally produce inaccurate or hallucinated information. If you spot something that looks wrong — a bad formula, a misquoted RFC, an incorrect default — please open an issue. Corrections are always welcome.
+
 ## Project Structure
 
 | Path | Description |

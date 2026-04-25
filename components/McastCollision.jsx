@@ -48,7 +48,7 @@ function McastCollision() {
 
   return (
     <div className="fadein">
-      <div style={{display:'grid', gridTemplateColumns:'minmax(0, 1.2fr) minmax(0, 0.8fr)', gap:24, alignItems:'start'}}>
+      <div className="grid-mobile-1" style={{display:'grid', gridTemplateColumns:'minmax(0, 1.2fr) minmax(0, 0.8fr)', gap:24, alignItems:'start'}}>
 
         {/* Main Column: Analyzer & Results */}
         <div style={{display:'flex', flexDirection:'column', gap:20}}>
@@ -68,13 +68,13 @@ function McastCollision() {
           {result && (
             <div className="card fadein">
               <div className="card-title">Analysis Results</div>
-              <div className="result-grid" style={{marginBottom:16}}>
+              <div className="result-grid grid-mobile-1" style={{marginBottom:16}}>
                 <ResultItem label="Total IPs Found" value={result.totalIPs} />
                 <ResultItem label="Unique MACs" value={result.totalMACs} accent />
                 <ResultItem label="Status" value={result.hasCollisions ? '⚠️ Collisions' : '✅ Clear'} red={result.hasCollisions} green={!result.hasCollisions} />
               </div>
 
-              <div className="table-wrap">
+              <div className="table-wrap hide-mobile">
                 <table>
                   <thead>
                     <tr>
@@ -102,6 +102,29 @@ function McastCollision() {
                   </tbody>
                 </table>
               </div>
+
+              {/* Mobile View */}
+              <div className="show-mobile mobile-cards">
+                {result.collisions.map((c, i) => (
+                  <div key={i} className="mobile-card" style={{borderLeft: c.ips.length > 1 ? '3px solid var(--red)' : 'none'}}>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">MAC</span>
+                      <span className="mobile-card-value" style={{color: c.ips.length > 1 ? 'var(--red)' : 'var(--cyan)', fontWeight:600}}>{c.mac}</span>
+                    </div>
+                    <div className="mobile-card-row" style={{flexDirection:'column', alignItems:'flex-start', borderBottom:'none'}}>
+                      <span className="mobile-card-label" style={{marginBottom:4}}>Associated IPs ({c.ips.length})</span>
+                      <div style={{display:'flex', flexWrap:'wrap', gap:4}}>
+                        {c.ips.map(ip => (
+                          <span key={ip} style={{fontFamily:'var(--mono)', fontSize:10, padding:'1px 4px', background:'var(--panel)', borderRadius:4, border:'1px solid var(--border)'}}>{ip}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div style={{marginTop:8, display:'flex', justifyContent:'flex-end'}}>
+                      <button className="btn btn-ghost btn-sm" onClick={() => setSelectedMac(c.mac)}>View 32:1 Relation</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -122,7 +145,7 @@ function McastCollision() {
             {macResult && !macResult.error && (
               <div style={{marginTop:10}}>
                 <div style={{fontSize:11, color:'var(--muted)', marginBottom:6}}>All 32 related IPs for this MAC:</div>
-                <div style={{maxHeight:250, overflowY:'auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:4}}>
+                <div className="grid-mobile-1" style={{maxHeight:250, overflowY:'auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:4}}>
                   {macResult.ips.map(ip => (
                     <div key={ip} style={{fontSize:11, fontFamily:'var(--mono)', background:'var(--panel)', padding:'2px 6px', borderRadius:4, border:'1px solid var(--border)', textAlign:'center'}}>
                       {ip}

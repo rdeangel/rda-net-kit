@@ -74,7 +74,8 @@ function LACPSimulator() {
       <div className="card">
         <div className="card-title">Enterprise EtherChannel Hashing Simulator</div>
 
-        <div className="two-col" style={{gap:20, marginBottom:16}}>
+        <div className="two-col grid-mobile-1"
+ style={{gap:20, marginBottom:16}}>
           <div className="field">
             <label className="label">Algorithm (Hashing Input)</label>
             <select className="input" value={method} onChange={e => setMethod(e.target.value)}>
@@ -103,7 +104,8 @@ function LACPSimulator() {
           </div>
         )}
 
-        <div className="two-col" style={{gap:20}}>
+        <div className="two-col grid-mobile-1"
+ style={{gap:20}}>
           <div>
             <div className="field">
               <label className="label">Source IP</label>
@@ -171,7 +173,7 @@ function LACPSimulator() {
 
         <div style={{marginTop:24}}>
            <div style={{fontSize:11, color:'var(--muted)', textTransform:'uppercase', textAlign:'center', marginBottom:12}}>Bundle Member Mapping</div>
-           <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(100px, 1fr))', gap:10}}>
+           <div className="grid-mobile-1" style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(100px, 1fr))', gap:10}}>
               {[...Array(links)].map((_, i) => (
                 <div key={i} style={{
                   background:currentPort === i+1 ? 'var(--cyan)' : 'var(--panel)',

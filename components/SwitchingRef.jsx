@@ -54,7 +54,7 @@ function SwitchingRef() {
             <div className="fadein">
               <div className="card">
                 <div className="card-title">STP Variant Comparison</div>
-                <div className="table-wrap"><table>
+                <div className="table-wrap hide-mobile"><table>
                   <thead><tr><th>Standard</th><th>Name</th><th>Instances</th><th>Convergence</th><th>BPDU</th><th>Note</th></tr></thead>
                   <tbody>
                     {[
@@ -76,10 +76,31 @@ function SwitchingRef() {
                     ))}
                   </tbody>
                 </table></div>
+                {/* Mobile View */}
+                <div className="show-mobile mobile-cards">
+                  {[
+                    {n:'STP (Classic)', std:'802.1D', c:'30-50s'},
+                    {n:'PVST+', std:'Cisco', c:'30-50s'},
+                    {n:'RSTP', std:'802.1w', c:'< 1s'},
+                    {n:'Rapid-PVST+', std:'Cisco', c:'< 1s'},
+                    {n:'MST', std:'802.1s', c:'< 1s'}
+                  ].map(v => (
+                    <div key={v.n} className="mobile-card">
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">{v.n}</span>
+                        <span className="badge badge-blue">{v.std}</span>
+                      </div>
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">Convergence</span>
+                        <span className="mobile-card-value" style={{color:v.c.includes('<')?'var(--green)':'var(--yellow)', fontWeight:600}}>{v.c}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="card">
                 <div className="card-title">STP Path Cost Reference (IEEE 802.1D-2004 long mode)</div>
-                <div className="table-wrap"><table>
+                <div className="table-wrap hide-mobile"><table>
                   <thead><tr><th>Link Speed</th><th>Cost (1998 short)</th><th>Cost (2004 long)</th></tr></thead>
                   <tbody>
                     {[['10 Mbps','100','2,000,000'],['100 Mbps','19','200,000'],['1 Gbps','4','20,000'],
@@ -92,10 +113,21 @@ function SwitchingRef() {
                     ))}
                   </tbody>
                 </table></div>
+                {/* Mobile View */}
+                <div className="show-mobile mobile-cards">
+                  {[['10M','100','2M'],['100M','19','200k'],['1G','4','20k'],['10G','2','2k'],['100G','-','200']].map(([sp,c98,c04]) => (
+                    <div key={sp} className="mobile-card">
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">{sp}</span>
+                        <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{c04} <span style={{color:'var(--muted)', fontSize:10, fontWeight:400}}>(long)</span></span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="card">
                 <div className="card-title">BPDU Key Fields (802.1D / 802.1w)</div>
-                <div className="table-wrap"><table>
+                <div className="table-wrap hide-mobile"><table>
                   <thead><tr><th>Field</th><th>Size</th><th>Notes</th></tr></thead>
                   <tbody>
                     {[
@@ -120,6 +152,26 @@ function SwitchingRef() {
                     ))}
                   </tbody>
                 </table></div>
+                {/* Mobile View */}
+                <div className="show-mobile mobile-cards">
+                  {[
+                    {f:'Protocol ID', s:'2 B', n:'0x0000'},
+                    {f:'Version', s:'1 B', n:'0=STP, 2=RSTP'},
+                    {f:'BPDU Type', s:'1 B', n:'0x00, 0x80, 0x02'},
+                    {f:'Root Bridge ID', s:'8 B', n:'Pri + MAC'},
+                    {f:'Root Path Cost', s:'4 B', n:'Sum to root'}
+                  ].map(b => (
+                    <div key={b.f} className="mobile-card">
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">{b.f}</span>
+                        <span className="badge badge-cyan">{b.s}</span>
+                      </div>
+                      <div className="mobile-card-row" style={{borderBottom:'none'}}>
+                        <span className="mobile-card-value" style={{textAlign:'left', paddingLeft:0, color:'var(--muted)', fontSize:11}}>{b.n}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -128,7 +180,7 @@ function SwitchingRef() {
             <div className="fadein">
               <div className="card">
                 <div className="card-title">Port States</div>
-                <div className="table-wrap"><table>
+                <div className="table-wrap hide-mobile"><table>
                   <thead><tr><th>802.1D State</th><th>RSTP State</th><th>BPDUs</th><th>Learns MACs</th><th>Forwards Data</th><th>Duration</th></tr></thead>
                   <tbody>
                     {[
@@ -149,6 +201,26 @@ function SwitchingRef() {
                     ))}
                   </tbody>
                 </table></div>
+                {/* Mobile View */}
+                <div className="show-mobile mobile-cards">
+                  {[
+                    {s:'Blocking', r:'Discarding', f:'No', d:'20s', c:'var(--red)'},
+                    {s:'Listening', r:'-', f:'No', d:'15s', c:'var(--yellow)'},
+                    {s:'Learning', r:'Learning', f:'No', d:'15s', c:'var(--yellow)'},
+                    {s:'Forwarding', r:'Forwarding', f:'Yes', d:'Stable', c:'var(--green)'}
+                  ].map(p => (
+                    <div key={p.s} className="mobile-card" style={{borderLeft:`3px solid ${p.c}`}}>
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">{p.s} (STP)</span>
+                        <span className="mobile-card-value" style={{color:'var(--muted)'}}>{p.r} (RSTP)</span>
+                      </div>
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">Forwards Data / Dur</span>
+                        <span className="mobile-card-value">{p.f} / {p.d}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="card">
                 <div className="card-title">Port Roles</div>
@@ -176,7 +248,7 @@ function SwitchingRef() {
               <div className="card">
                 <div className="card-title">STP Timer Configuration</div>
                 <div className="hint" style={{marginBottom:12}}>Set timers only on the Root Bridge. Cisco formula: Fwd Delay ≥ (diameter+2)/2; Max Age ≥ 2×(Fwd Delay−1).</div>
-                <div className="two-col" style={{gap:20}}>
+                <div className="two-col grid-mobile-1" style={{gap:20}}>
                   <div className="field">
                     <label className="label">Hello Time (s) — default 2</label>
                     <input className="input" value={hello} onChange={e=>setHello(e.target.value)} placeholder="2"/>
@@ -196,7 +268,7 @@ function SwitchingRef() {
               </div>
               <div className="card fadein">
                 <div className="card-title">Convergence Analysis</div>
-                <div className="result-grid">
+                <div className="result-grid grid-mobile-1">
                   <ResultItem label="802.1D Max Convergence" value={`${conv8021d} s`}
                     red={conv8021d>50} yellow={conv8021d>30&&conv8021d<=50} green={conv8021d<=30}/>
                   <ResultItem label="RSTP Worst-Case (3×Hello)" value={`${convRSTP} s`} green/>
@@ -205,7 +277,7 @@ function SwitchingRef() {
                 </div>
                 <div style={{marginTop:16}}>
                   <div className="label" style={{marginBottom:8}}>Diameter-Based Recommended Timers</div>
-                  <div className="table-wrap"><table>
+                  <div className="table-wrap hide-mobile"><table>
                     <thead><tr><th>Diameter</th><th>Hello</th><th>Fwd Delay</th><th>Max Age</th><th>Max Convergence</th></tr></thead>
                     <tbody>
                       {[2,3,4,5,6,7].map(d=>{
@@ -222,6 +294,24 @@ function SwitchingRef() {
                       })}
                     </tbody>
                   </table></div>
+                  {/* Mobile View */}
+                  <div className="show-mobile mobile-cards">
+                    {[2,4,7].map(d => {
+                      const fd=Math.min(30,Math.ceil((d+2)/2+10)), ma=Math.min(40,Math.ceil(fd*2-2));
+                      return (
+                        <div key={d} className="mobile-card">
+                          <div className="mobile-card-row">
+                            <span className="mobile-card-label">Network Diameter: {d}</span>
+                            <span className="mobile-card-value" style={{fontWeight:600}}>{ma+2*fd}s Conv.</span>
+                          </div>
+                          <div className="mobile-card-row">
+                            <span className="mobile-card-label">Hello/Fwd/Max</span>
+                            <span className="mobile-card-value">2s / {fd}s / {ma}s</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
                 <div style={{marginTop:12,padding:'10px 14px',background:'var(--card)',borderRadius:'var(--radius)',border:'1px solid var(--border)',fontFamily:'var(--mono)',fontSize:12}}>
                   <div style={{color:'var(--muted)',marginBottom:4}}># Cisco IOS — configure on Root Bridge only</div>
@@ -238,7 +328,7 @@ function SwitchingRef() {
               <div className="card">
                 <div className="card-title">Bridge ID Builder</div>
                 <div className="hint" style={{marginBottom:12}}>Bridge ID = Priority (4 bits) + System ID Ext / VLAN (12 bits) + MAC (6 bytes). Total 8 bytes. Lower Bridge ID wins root election.</div>
-                <div className="two-col" style={{gap:20}}>
+                <div className="two-col grid-mobile-1" style={{gap:20}}>
                   <div className="field">
                     <label className="label">Bridge Priority (multiple of 4096)</label>
                     <select className="input" value={priority} onChange={e=>setPriority(e.target.value)}>
@@ -255,7 +345,7 @@ function SwitchingRef() {
               </div>
               <div className="card fadein">
                 <div className="card-title">Bridge ID for VLAN 1</div>
-                <div className="result-grid">
+                <div className="result-grid grid-mobile-1">
                   <ResultItem label="Priority Configured" value={bridgePri}/>
                   <ResultItem label="System ID Ext (VLAN)" value="1"/>
                   <ResultItem label="Effective Priority Field" value={bridgePri+1} accent/>
@@ -264,7 +354,7 @@ function SwitchingRef() {
               </div>
               <div className="card">
                 <div className="card-title">Priority Planning Reference</div>
-                <div className="table-wrap"><table>
+                <div className="table-wrap hide-mobile"><table>
                   <thead><tr><th>Role</th><th>Priority</th><th>IOS Command</th></tr></thead>
                   <tbody>
                     {[
@@ -284,6 +374,24 @@ function SwitchingRef() {
                     ))}
                   </tbody>
                 </table></div>
+                {/* Mobile View */}
+                <div className="show-mobile mobile-cards">
+                  {[
+                    {r:'Primary Root', p:'0', c:'priority 0'},
+                    {r:'Secondary Root', p:'4096', c:'priority 4096'},
+                    {r:'Ensure Never', p:'61440', c:'priority 61440'},
+                  ].map(v => (
+                    <div key={v.r} className="mobile-card">
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">{v.r}</span>
+                        <span className="mobile-card-value" style={{fontWeight:600, color:'var(--cyan)'}}>{v.p}</span>
+                      </div>
+                      <div className="mobile-card-row" style={{borderBottom:'none'}}>
+                        <span className="mobile-card-value" style={{textAlign:'left', paddingLeft:0, color:'var(--muted)', fontSize:10, fontFamily:'var(--mono)'}}>... {v.c}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -292,7 +400,7 @@ function SwitchingRef() {
             <div className="fadein">
               <div className="card">
                 <div className="card-title">Typical Cisco Port Configurations</div>
-                <div className="two-col" style={{gap:20}}>
+                <div className="two-col grid-mobile-1" style={{gap:20}}>
                   <div>
                     <strong style={{color:'var(--text)',fontSize:13,display:'block',marginBottom:8}}>Access Port (Host)</strong>
                     <div style={{background:'var(--mono-bg)',padding:10,borderRadius:6,fontFamily:'var(--mono)',fontSize:11,color:'var(--green)',border:'1px solid var(--border)'}}>
@@ -320,7 +428,7 @@ function SwitchingRef() {
               </div>
               <div className="card">
                 <div className="card-title">Root Bridge Configuration</div>
-                <div className="two-col" style={{gap:20}}>
+                <div className="two-col grid-mobile-1" style={{gap:20}}>
                   <div>
                     <strong style={{color:'var(--text)',fontSize:13,display:'block',marginBottom:8}}>Manual Priority</strong>
                     <div style={{background:'var(--mono-bg)',padding:10,borderRadius:6,fontFamily:'var(--mono)',fontSize:11,color:'var(--green)',border:'1px solid var(--border)'}}>
@@ -343,7 +451,7 @@ function SwitchingRef() {
               </div>
               <div className="card">
                 <div className="card-title">Key Verification Commands</div>
-                <div className="table-wrap"><table>
+                <div className="table-wrap hide-mobile"><table>
                   <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
                   <tbody>
                     {[
@@ -360,6 +468,24 @@ function SwitchingRef() {
                     ))}
                   </tbody>
                 </table></div>
+                {/* Mobile View */}
+                <div className="show-mobile mobile-cards">
+                  {[
+                    ['show spanning-tree', 'General state'],
+                    ['show spanning-tree vlan X', 'Detailed VLAN state'],
+                    ['show spanning-tree summary', 'Summary/Counts'],
+                    ['show spanning-tree inconsistent', 'Error/Guard states']
+                  ].map(([cmd, desc]) => (
+                    <div key={cmd} className="mobile-card">
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-value" style={{color:'var(--cyan)', fontFamily:'var(--mono)', textAlign:'left', paddingLeft:0}}>{cmd}</span>
+                      </div>
+                      <div className="mobile-card-row" style={{borderBottom:'none'}}>
+                        <span className="mobile-card-value" style={{textAlign:'left', paddingLeft:0, color:'var(--muted)', fontSize:11}}>{desc}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -371,7 +497,7 @@ function SwitchingRef() {
         <div className="fadein">
           <div className="card">
             <div className="card-title">LACP vs PAgP vs Static</div>
-            <div className="table-wrap"><table>
+            <div className="table-wrap hide-mobile"><table>
               <thead><tr><th>Feature</th><th>LACP (802.3ad)</th><th>PAgP (Cisco)</th><th>Static (On)</th></tr></thead>
               <tbody>
                 {[
@@ -392,10 +518,28 @@ function SwitchingRef() {
                 ))}
               </tbody>
             </table></div>
+            {/* Mobile View */}
+            <div className="show-mobile mobile-cards">
+              {[
+                {f:'Standard', l:'IEEE (Open)', p:'Cisco'},
+                {f:'Active Mode', l:'Active', p:'Desirable'},
+                {f:'Negotiation', l:'Yes (PDUs)', p:'Yes (PDUs)'}
+              ].map(f => (
+                <div key={f.f} className="mobile-card">
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">{f.f}</span>
+                    <span className="mobile-card-value" style={{fontWeight:600}}>{f.l} <span style={{fontWeight:400, color:'var(--muted)'}}>(LACP)</span></span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-value" style={{marginLeft:'auto', fontWeight:600}}>{f.p} <span style={{fontWeight:400, color:'var(--muted)'}}>(PAgP)</span></span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="card">
             <div className="card-title">Mode Compatibility Matrix</div>
-            <div className="table-wrap"><table>
+            <div className="table-wrap hide-mobile"><table>
               <thead><tr><th>Side A \ Side B</th><th>Active</th><th>Passive</th><th>On</th></tr></thead>
               <tbody>
                 {[
@@ -412,11 +556,27 @@ function SwitchingRef() {
                 ))}
               </tbody>
             </table></div>
+            {/* Mobile View */}
+            <div className="show-mobile mobile-cards">
+              {[
+                {a:'Active', b:'Active / Passive', s:'✓ Forms'},
+                {a:'Active', b:'On', s:'✗ No'},
+                {a:'Passive', b:'Passive', s:'✗ No'},
+                {a:'On', b:'On', s:'✓ Forms'}
+              ].map((r,i) => (
+                <div key={i} className="mobile-card">
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">{r.a} + {r.b}</span>
+                    <span className="mobile-card-value" style={{color:r.s.startsWith('✓')?'var(--green)':'var(--red)', fontWeight:600}}>{r.s}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
             <div className="hint" style={{marginTop:10}}>Two passive sides never form — at least one must be Active. Static "On" only pairs with another "On".</div>
           </div>
           <div className="card">
             <div className="card-title">Load Balancing Methods</div>
-            <div className="table-wrap"><table>
+            <div className="table-wrap hide-mobile"><table>
               <thead><tr><th>Method</th><th>Command</th><th>Best For</th></tr></thead>
               <tbody>
                 {[
@@ -436,6 +596,24 @@ function SwitchingRef() {
                 ))}
               </tbody>
             </table></div>
+            {/* Mobile View */}
+            <div className="show-mobile mobile-cards">
+              {[
+                {m:'Src+Dst IP', c:'src-dst-ip', u:'Routed (Default)'},
+                {m:'Src+Dst IP+Port', c:'src-dst-mixed-ip-port', u:'L4-aware flows'},
+                {m:'Source MAC', c:'src-mac', u:'L2-only'}
+              ].map(v => (
+                <div key={v.m} className="mobile-card">
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">{v.m}</span>
+                    <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600, fontFamily:'var(--mono)', fontSize:10}}>{v.c}</span>
+                  </div>
+                  <div className="mobile-card-row" style={{borderBottom:'none'}}>
+                    <span className="mobile-card-value" style={{textAlign:'left', paddingLeft:0, color:'var(--muted)', fontSize:11}}>{v.u}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
             <div style={{marginTop:12,padding:'10px 14px',background:'var(--card)',borderRadius:'var(--radius)',border:'1px solid var(--border)',fontFamily:'var(--mono)',fontSize:12}}>
               <div style={{color:'var(--muted)',marginBottom:4}}># Cisco IOS</div>
               <div style={{color:'var(--cyan)'}}>port-channel load-balance src-dst-ip</div>
@@ -445,7 +623,7 @@ function SwitchingRef() {
           </div>
           <div className="card">
             <div className="card-title">EtherChannel Configuration (Cisco IOS)</div>
-            <div className="two-col" style={{gap:20}}>
+            <div className="two-col grid-mobile-1" style={{gap:20}}>
               <div>
                 <strong style={{color:'var(--text)',fontSize:13,display:'block',marginBottom:8}}>LACP Active</strong>
                 <div style={{background:'var(--mono-bg)',padding:10,borderRadius:6,fontFamily:'var(--mono)',fontSize:11,color:'var(--green)',border:'1px solid var(--border)'}}>
@@ -476,7 +654,7 @@ function SwitchingRef() {
         <div className="fadein">
           <div className="card">
             <div className="card-title" style={{color:'var(--cyan)'}}>Cisco vPC (Virtual Port-Channel) — Nexus</div>
-            <div className="two-col" style={{gap:20}}>
+            <div className="two-col grid-mobile-1" style={{gap:20}}>
               <div>
                 <strong style={{color:'var(--text)',fontSize:13,display:'block',marginBottom:8}}>Core Components</strong>
                 <ul style={{fontSize:12,color:'var(--muted)',lineHeight:1.7,paddingLeft:16}}>
@@ -509,7 +687,7 @@ function SwitchingRef() {
             </div>
           </div>
           <div className="card">
-            <div className="two-col" style={{gap:20}}>
+            <div className="two-col grid-mobile-1" style={{gap:20}}>
               <div>
                 <strong style={{color:'var(--text)',fontSize:13,display:'block',marginBottom:8}}>vPC Data Plane Rule</strong>
                 <div style={{fontSize:12,color:'var(--muted)',lineHeight:1.7,padding:10,background:'rgba(6,182,212,0.05)',borderRadius:6,border:'1px solid var(--border)'}}>
@@ -535,7 +713,7 @@ function SwitchingRef() {
           </div>
           <div className="card">
             <div className="card-title">vPC Configuration Skeleton (NX-OS)</div>
-            <div className="two-col" style={{gap:20}}>
+            <div className="two-col grid-mobile-1" style={{gap:20}}>
               <div>
                 <strong style={{color:'var(--text)',fontSize:13,display:'block',marginBottom:8}}>Domain & Keepalive</strong>
                 <div style={{background:'var(--mono-bg)',padding:10,borderRadius:6,fontFamily:'var(--mono)',fontSize:11,color:'var(--green)',border:'1px solid var(--border)'}}>

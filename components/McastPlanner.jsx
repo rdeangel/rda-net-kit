@@ -98,7 +98,7 @@ function McastPlanner() {
         </div>
         <div className="card fadein">
           <div className="card-title">Allocation Table</div>
-          <div className="table-wrap">
+          <div className="table-wrap hide-mobile">
             <table>
               <thead><tr><th>#</th><th>Name</th><th>CIDR</th><th>Range</th><th>Addresses</th><th>MAC</th></tr></thead>
               <tbody>
@@ -116,6 +116,38 @@ function McastPlanner() {
                 ))}
               </tbody>
             </table>
+          </div>
+          {/* Mobile View */}
+          <div className="show-mobile mobile-cards">
+            {result.allocations.map((a, i) => (
+              <div key={i} className="mobile-card" style={{borderLeft: a.error ? '3px solid var(--red)' : 'none'}}>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">Group {i+1}</span>
+                  <span className="mobile-card-value" style={{fontWeight:600}}>{a.name || 'Unnamed'}</span>
+                </div>
+                {a.error ? (
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label" style={{color:'var(--red)'}}>Error</span>
+                    <span className="mobile-card-value" style={{color:'var(--red)'}}>{a.error}</span>
+                  </div>
+                ) : (
+                  <>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">CIDR</span>
+                      <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{a.subnet.cidr}</span>
+                    </div>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">Range</span>
+                      <span className="mobile-card-value" style={{fontSize:11}}>{a.subnet.firstHostStr} - {a.subnet.lastHostStr}</span>
+                    </div>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">Hosts / MAC</span>
+                      <span className="mobile-card-value">{a.subnet.totalHosts} / {Multicast.ipv4ToMac(a.subnet.network).slice(-8)}</span>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
           </div>
           <div className="btn-row">
             <button className="btn btn-ghost btn-sm" onClick={() => exportCSV(

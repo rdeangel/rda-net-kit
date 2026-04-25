@@ -175,7 +175,7 @@ function IPv6Gauntlet() {
     <div className="fadein" style={{maxWidth:620, margin:'0 auto', padding:'24px 0', textAlign:'center'}}>
       <div style={{fontSize:38, fontWeight:900, fontFamily:'var(--mono)', color:'var(--magenta)', textShadow:'0 0 30px var(--magenta)', letterSpacing:2, marginBottom:8}}>IPv6 GAUNTLET</div>
       <div style={{color:'var(--muted)', fontSize:13, marginBottom:28}}>4 rounds · 3 lives · score carries through · all multiple choice</div>
-      <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:28, textAlign:'left'}}>
+      <div className="grid-mobile-1" style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:28, textAlign:'left'}}>
         {ROUNDS.map((r,i) => (
           <div key={r.id} style={{background:'var(--card)', border:`1px solid ${r.color}44`, borderRadius:10, padding:14}}>
             <div style={{fontFamily:'var(--mono)', fontWeight:900, color:r.color, fontSize:12, marginBottom:4}}>{r.label}: {r.name}</div>
@@ -185,7 +185,23 @@ function IPv6Gauntlet() {
         ))}
       </div>
       <button onClick={() => startRound(0, 0, 3, [])}
-        style={{background:'var(--magenta)', color:'#000', border:'none', borderRadius:10, padding:'14px 44px', fontFamily:'var(--mono)', fontWeight:900, fontSize:16, cursor:'pointer', letterSpacing:2, boxShadow:'0 0 30px var(--magenta)55'}}>
+        style={{
+          background:'var(--magenta)', 
+          color:'#000', 
+          border:'none', 
+          borderRadius:10, 
+          padding:'16px 52px', 
+          fontFamily:'var(--mono)', 
+          fontWeight:900, 
+          fontSize:18, 
+          cursor:'pointer', 
+          letterSpacing:3, 
+          boxShadow:'0 0 30px rgba(244, 114, 182, 0.4)',
+          transition:'transform 0.2s, box-shadow 0.2s'
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 0 40px rgba(244, 114, 182, 0.6)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 0 30px rgba(244, 114, 182, 0.4)'; }}
+      >
         START GAUNTLET
       </button>
     </div>

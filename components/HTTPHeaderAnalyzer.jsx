@@ -192,23 +192,42 @@ function HTTPHeaderAnalyzer() {
           )}
 
           {tab === 'headers' && (
-            <div className="table-wrap">
-              <table>
-                <thead><tr><th>Header</th><th>Value</th><th></th></tr></thead>
-                <tbody>
-                  {Object.entries(result.headers).sort(([a],[b]) => a.localeCompare(b)).map(([k, v]) => {
-                    const isSec = HTTP_SECURITY_CHECKS.some(c => c.key === k);
-                    return (
-                      <tr key={k}>
-                        <td style={{fontFamily:'var(--mono)',fontSize:11,color:isSec?'var(--cyan)':'var(--muted)',whiteSpace:'nowrap'}}>{k}</td>
-                        <td style={{fontFamily:'var(--mono)',fontSize:11,wordBreak:'break-all'}}>{v}</td>
-                        <td><CopyBtn text={v} /></td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+            <>
+              <div className="table-wrap hide-mobile">
+                <table>
+                  <thead><tr><th>Header</th><th>Value</th><th></th></tr></thead>
+                  <tbody>
+                    {Object.entries(result.headers).sort(([a],[b]) => a.localeCompare(b)).map(([k, v]) => {
+                      const isSec = HTTP_SECURITY_CHECKS.some(c => c.key === k);
+                      return (
+                        <tr key={k}>
+                          <td style={{fontFamily:'var(--mono)',fontSize:11,color:isSec?'var(--cyan)':'var(--muted)',whiteSpace:'nowrap'}}>{k}</td>
+                          <td style={{fontFamily:'var(--mono)',fontSize:11,wordBreak:'break-all'}}>{v}</td>
+                          <td><CopyBtn text={v} /></td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              {/* Mobile View */}
+              <div className="show-mobile mobile-cards">
+                {Object.entries(result.headers).sort(([a],[b]) => a.localeCompare(b)).map(([k, v]) => {
+                  const isSec = HTTP_SECURITY_CHECKS.some(c => c.key === k);
+                  return (
+                    <div key={k} className="mobile-card">
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label" style={{color:isSec?'var(--cyan)':'var(--muted)', fontFamily:'var(--mono)'}}>{k}</span>
+                        <div style={{flexShrink:0}}><CopyBtn text={v} label="Copy" /></div>
+                      </div>
+                      <div style={{paddingTop:6, fontFamily:'var(--mono)', fontSize:11, color:'var(--text)', wordBreak:'break-all'}}>
+                        {v}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
           )}
         </div>
       )}

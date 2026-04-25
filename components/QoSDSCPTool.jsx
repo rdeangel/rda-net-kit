@@ -48,7 +48,7 @@ function QoSDSCPTool() {
 
   return (
     <div className="fadein">
-      <div style={{display:'flex', gap:8, marginBottom:20}}>
+      <div className="grid-mobile-1" style={{display:'flex', gap:8, marginBottom:20}}>
         {[
           {id:'dscp', l:'DSCP Decoder'},
           {id:'delay', l:'Delay & Latency'},
@@ -65,7 +65,7 @@ function QoSDSCPTool() {
         <div className="fadein">
           <div className="card">
             <div className="card-title">Bit-Level ToS/DSCP Decoder</div>
-            <div className="two-col" style={{gap:20}}>
+            <div className="two-col grid-mobile-1" style={{gap:20}}>
               <div className="field">
                 <label className="label">Standard DSCP / PHB Select</label>
                 <select className="input" value={dscpInput} onChange={e => setDscpInput(e.target.value)}>
@@ -128,12 +128,12 @@ function QoSDSCPTool() {
                   </div>
                 ))}
               </div>
-              <div style={{display:'flex', justifyContent:'space-between', marginTop:8, fontSize:10}}>
+              <div className="grid-mobile-1" style={{display:'flex', justifyContent:'space-between', marginTop:8, fontSize:10}}>
                 <div style={{color:'var(--cyan)'}}>DSCP bits (Differentiated Services)</div>
                 <div style={{color:'var(--purple)'}}>ECN bits (Congestion)</div>
               </div>
             </div>
-            <div className="result-grid" style={{marginTop:24}}>
+            <div className="result-grid grid-mobile-1" style={{marginTop:24}}>
               <ResultItem label="ToS Hex" value={'0x' + (getDscpVal() << 2).toString(16).toUpperCase().padStart(2,'0')} />
               <ResultItem label="IP Precedence" value={Math.floor(getDscpVal() / 8)} />
               <ResultItem label="CoS Mapping" value={Math.floor(getDscpVal() / 8)} />
@@ -141,7 +141,7 @@ function QoSDSCPTool() {
           </div>
           <div className="card">
             <div className="card-title">Standard Application Markings <span style={{color:'var(--purple)', marginLeft:4}}>(<RFCLink rfc="RFC 4594" />)</span></div>
-            <div className="table-wrap">
+            <div className="table-wrap hide-mobile">
               <table>
                 <thead><tr><th>App Type</th><th>DSCP</th><th>Decimal</th><th>CoS</th><th>Priority</th></tr></thead>
                 <tbody style={{fontSize:11, color:'var(--muted)'}}>
@@ -157,6 +157,32 @@ function QoSDSCPTool() {
                   <tr><td style={{color:'var(--text)'}}>Best Effort</td><td>BE</td><td>0</td><td>0</td><td>None</td></tr>
                 </tbody>
               </table>
+            </div>
+            {/* Mobile View */}
+            <div className="show-mobile mobile-cards">
+              {[
+                {a:'Network Control', d:'CS6', dec:48, p:'Critical'},
+                {a:'Voice (VoIP)', d:'EF', dec:46, p:'Highest'},
+                {a:'Broadcast Video', d:'CS4', dec:32, p:'High'},
+                {a:'Real-Time Interactive', d:'AF41', dec:34, p:'High'},
+                {a:'Multimedia Streaming', d:'AF31', dec:26, p:'Medium'},
+                {a:'Signaling', d:'CS3', dec:24, p:'Medium'},
+                {a:'Transactional Data', d:'AF21', dec:18, p:'Normal'},
+                {a:'Bulk Data', d:'AF11', dec:10, p:'Low'},
+                {a:'Scavenger', d:'CS1', dec:8, p:'Lowest'},
+                {a:'Best Effort', d:'BE', dec:0, p:'None'}
+              ].map(m => (
+                <div key={m.a} className="mobile-card">
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">{m.a}</span>
+                    <span className="mobile-card-value" style={{fontWeight:600}}>{m.d} ({m.dec})</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Priority</span>
+                    <span className="mobile-card-value" style={{color:m.p==='Critical'||m.p==='Highest'?'var(--red)':m.p.includes('High')?'var(--yellow)':'inherit'}}>{m.p}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

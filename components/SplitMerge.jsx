@@ -45,7 +45,7 @@ function SplitMerge() {
           ))}
         </div>
         {mode === 'split' ? (
-          <div className="two-col">
+          <div className="two-col grid-mobile-1">
             <div className="field"><label className="label">Parent Network</label>
               <input className="input" value={cidr} onChange={e => setCidr(e.target.value)} placeholder="192.168.0.0/22" /></div>
             <div className="field"><label className="label">Number of Subnets</label>
@@ -66,11 +66,26 @@ function SplitMerge() {
           {result.mode === 'split' ? (
             <>
               <div className="card-title">{result.subnets.length} subnets of /{result.newPrefix} from {result.parent.cidr}</div>
-              <div className="table-wrap">
+              <div className="table-wrap hide-mobile">
                 <table><thead><tr><th>#</th><th>Network</th><th>CIDR</th><th>First Host</th><th>Last Host</th><th>Broadcast</th></tr></thead>
                 <tbody>{result.subnets.map((sn,i) => (
                   <tr key={i}><td style={{color:'var(--dim)'}}>{i+1}</td><td style={{color:'var(--cyan)'}}>{sn.networkStr}</td><td>{sn.cidr}</td><td>{sn.firstHostStr}</td><td>{sn.lastHostStr}</td><td style={{color:'var(--red)'}}>{sn.broadcastStr}</td></tr>
                 ))}</tbody></table>
+              </div>
+              {/* Mobile View */}
+              <div className="show-mobile mobile-cards">
+                {result.subnets.map((sn,i) => (
+                  <div key={i} className="mobile-card">
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">Subnet {i+1}</span>
+                      <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{sn.cidr}</span>
+                    </div>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">Range</span>
+                      <span className="mobile-card-value" style={{fontSize:11}}>{sn.firstHostStr} - {sn.lastHostStr}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
               <div className="btn-row">
                 <button className="btn btn-ghost btn-sm" onClick={() => exportCSV(result.subnets.map((s,i)=>({index:i+1,cidr:s.cidr,network:s.networkStr,first:s.firstHostStr,last:s.lastHostStr,broadcast:s.broadcastStr})),'split.csv')}>Export CSV</button>
@@ -79,7 +94,7 @@ function SplitMerge() {
           ) : (
             <>
               <div className="card-title">Summary Route</div>
-              <div className="result-grid" style={{marginBottom:16}}>
+              <div className="result-grid grid-mobile-1" style={{marginBottom:16}}>
                 <ResultItem label="Supernet CIDR" value={result.supernet.cidr} accent />
                 <ResultItem label="Network" value={result.supernet.networkStr} />
                 <ResultItem label="Broadcast" value={result.supernet.broadcastStr} />
@@ -87,10 +102,25 @@ function SplitMerge() {
                 <ResultItem label="Total Addresses" value={result.supernet.totalCount} />
               </div>
               <div className="card-title">Input Networks</div>
-              <div className="table-wrap">
+              <div className="table-wrap hide-mobile">
                 <table><thead><tr><th>CIDR</th><th>Network</th><th>Broadcast</th><th>Hosts</th></tr></thead>
                 <tbody>{result.subnets.map((n,i) => <tr key={i}><td style={{color:'var(--cyan)'}}>{n.cidr}</td><td>{n.networkStr}</td><td>{n.broadcastStr}</td><td style={{color:'var(--green)'}}>{n.hostCount}</td></tr>)}</tbody>
                 </table>
+              </div>
+              {/* Mobile View */}
+              <div className="show-mobile mobile-cards">
+                {result.subnets.map((n,i) => (
+                  <div key={i} className="mobile-card">
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">CIDR</span>
+                      <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{n.cidr}</span>
+                    </div>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">Hosts</span>
+                      <span className="mobile-card-value" style={{color:'var(--green)'}}>{n.hostCount}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </>
           )}

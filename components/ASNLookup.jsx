@@ -149,7 +149,7 @@ function ASNLookup() {
               return lines.join('\n');
             }} />
           </div>
-          <div className="result-grid" style={{marginBottom:12}}>
+          <div className="result-grid grid-mobile-1" style={{marginBottom:12}}>
             <ResultItem label="IP" value={result.data.ip} accent />
             <ResultItem label="Type" value={result.data.type} />
             <ResultItem label="ASN" value={result.data.asn} />
@@ -158,7 +158,7 @@ function ASNLookup() {
             {result.data.hostname && <ResultItem label="Hostname" value={result.data.hostname} />}
           </div>
           <div className="card-title" style={{marginTop:4}}>Geolocation</div>
-          <div className="result-grid" style={{marginBottom:12}}>
+          <div className="result-grid grid-mobile-1" style={{marginBottom:12}}>
             <ResultItem label="Country" value={result.data.country_code ? `${result.data.country} (${result.data.country_code})` : result.data.country} />
             <ResultItem label="Region" value={result.data.region} />
             <ResultItem label="City" value={result.data.city} />
@@ -188,7 +188,7 @@ function ASNLookup() {
               return lines.join('\n');
             }} />
           </div>
-          <div className="result-grid" style={{marginBottom:16}}>
+          <div className="result-grid grid-mobile-1" style={{marginBottom:16}}>
             <ResultItem label="ASN" value={`AS${result.data.asn}`} accent />
             <ResultItem label="Name" value={result.data.name} />
             <ResultItem label="Description" value={result.data.description_short || result.data.description_full?.[0] || '-'} />
@@ -199,22 +199,38 @@ function ASNLookup() {
           {result.data.prefixes_v4?.length > 0 && (
             <>
               <div className="card-title">IPv4 Prefixes ({result.data.prefixes_v4.length})</div>
-              <div className="table-wrap" style={{maxHeight:200,overflowY:'auto'}}>
+              <div className="table-wrap hide-mobile" style={{maxHeight:200,overflowY:'auto'}}>
                 <table><thead><tr><th>Prefix</th></tr></thead>
                 <tbody>{result.data.prefixes_v4.slice(0,50).map((p,i) => (
                   <tr key={i}><td style={{color:'var(--cyan)'}}>{p.prefix}</td></tr>
                 ))}</tbody></table>
+              </div>
+              {/* Mobile View */}
+              <div className="show-mobile mobile-cards" style={{maxHeight:200, overflowY:'auto'}}>
+                {result.data.prefixes_v4.slice(0,50).map((p,i) => (
+                  <div key={i} className="mobile-card" style={{padding:'6px 12px'}}>
+                    <span style={{color:'var(--cyan)', fontFamily:'var(--mono)', fontSize:12}}>{p.prefix}</span>
+                  </div>
+                ))}
               </div>
             </>
           )}
           {result.data.prefixes_v6?.length > 0 && (
             <>
               <div className="card-title" style={{marginTop:12}}>IPv6 Prefixes ({result.data.prefixes_v6.length})</div>
-              <div className="table-wrap" style={{maxHeight:200,overflowY:'auto'}}>
+              <div className="table-wrap hide-mobile" style={{maxHeight:200,overflowY:'auto'}}>
                 <table><thead><tr><th>Prefix</th></tr></thead>
                 <tbody>{result.data.prefixes_v6.slice(0,50).map((p,i) => (
                   <tr key={i}><td style={{color:'var(--purple)'}}>{p.prefix}</td></tr>
                 ))}</tbody></table>
+              </div>
+              {/* Mobile View */}
+              <div className="show-mobile mobile-cards" style={{maxHeight:200, overflowY:'auto'}}>
+                {result.data.prefixes_v6.slice(0,50).map((p,i) => (
+                  <div key={i} className="mobile-card" style={{padding:'6px 12px'}}>
+                    <span style={{color:'var(--purple)', fontFamily:'var(--mono)', fontSize:12}}>{p.prefix}</span>
+                  </div>
+                ))}
               </div>
             </>
           )}

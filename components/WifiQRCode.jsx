@@ -57,7 +57,7 @@ function WifiQRCode() {
             </select>
           </div>
         </div>
-        <div className="two-col">
+        <div className="two-col grid-mobile-1">
           <div className="field">
             <label className="label">Password</label>
             <input className="input" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" disabled={encryption === 'nopass'} />

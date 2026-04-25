@@ -31,7 +31,7 @@ function VXLANRef() {
         </div>
       </div>
 
-      <div className="two-col">
+      <div className="two-col grid-mobile-1">
         <div className="card">
           <div className="card-title">MTU & Fragmentation Requirements</div>
           <div style={{fontSize:12, color:'var(--muted)', lineHeight:1.6}}>

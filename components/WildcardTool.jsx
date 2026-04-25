@@ -63,7 +63,7 @@ function WildcardTool() {
       {result && (
         <div className="card fadein">
           <div className="card-title">Results — /{result.prefix}</div>
-          <div className="result-grid">
+          <div className="result-grid grid-mobile-1">
             <ResultItem label="Subnet Mask" value={result.mask} accent />
             <ResultItem label="Wildcard Mask" value={result.wildcard} yellow />
             <ResultItem label="Prefix Length" value={`/${result.prefix}`} />
@@ -97,7 +97,7 @@ function WildcardTool() {
             </div>
           </div>
           <div className="card-title" style={{marginTop:16}}>All Prefix Reference</div>
-          <div className="table-wrap" style={{maxHeight:240,overflowY:'auto'}}>
+          <div className="table-wrap hide-mobile" style={{maxHeight:240,overflowY:'auto'}}>
             <table>
               <thead><tr><th>Prefix</th><th>Subnet Mask</th><th>Wildcard</th><th>Hosts</th></tr></thead>
               <tbody>
@@ -116,6 +116,30 @@ function WildcardTool() {
                 })}
               </tbody>
             </table>
+          </div>
+          {/* Mobile View */}
+          <div className="show-mobile mobile-cards" style={{maxHeight:300, overflowY:'auto'}}>
+            {prefixes.map(p => {
+              const m = IPv4.mask(p);
+              const w = (~m)>>>0;
+              const hosts = p <= 30 ? Math.pow(2,32-p)-2 : p===31 ? 2 : 1;
+              return (
+                <div key={p} className="mobile-card" style={result.prefix===p?{borderColor:'var(--cyan)', background:'rgba(0,212,200,.05)'}:{}}>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Prefix</span>
+                    <span className="mobile-card-value" style={{color: result.prefix===p?'var(--cyan)':'inherit', fontWeight:600}}>/{p}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Mask / Wildcard</span>
+                    <span className="mobile-card-value">{IPv4.str(m)} / <span style={{color:'var(--yellow)'}}>{IPv4.str(w)}</span></span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Usable Hosts</span>
+                    <span className="mobile-card-value" style={{color:'var(--green)'}}>{hosts.toLocaleString()}</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

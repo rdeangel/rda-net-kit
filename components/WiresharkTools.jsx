@@ -335,7 +335,7 @@ function WiresharkTools() {
 
   return (
     <div className="fadein">
-      <div style={{display:'flex', gap:8, marginBottom:20}}>
+      <div style={{display:'flex', gap:8, marginBottom:20, flexWrap:'wrap'}}>
         {[
           { id:'display', label:'Display Filter' },
           { id:'capture', label:'Capture Filter (BPF)' },
@@ -518,7 +518,7 @@ function WiresharkTools() {
           {commonFilters.map(g => (
             <div key={g.cat} className="card">
               <div className="card-title">{g.cat} Filters</div>
-              <div className="table-wrap">
+              <div className="table-wrap hide-mobile">
                 <table>
                   <thead><tr><th>Filter Expression</th><th>Description</th><th style={{width:80}}>Action</th></tr></thead>
                   <tbody>
@@ -531,6 +531,22 @@ function WiresharkTools() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+              {/* Mobile View */}
+              <div className="show-mobile mobile-cards">
+                {g.filters.map(f => (
+                  <div key={f.f} className="mobile-card">
+                    <div className="mobile-card-row" style={{borderBottom:'none', paddingBottom:0}}>
+                      <span className="mobile-card-value" style={{color:'var(--cyan)', textAlign:'left', paddingLeft:0, fontFamily:'var(--mono)', fontSize:11, wordBreak:'break-all'}}>{f.f}</span>
+                    </div>
+                    <div className="mobile-card-row" style={{borderBottom:'none'}}>
+                      <span className="mobile-card-value" style={{textAlign:'left', paddingLeft:0, color:'var(--muted)', fontSize:11}}>{f.d}</span>
+                    </div>
+                    <div style={{marginTop:8, display:'flex', justifyContent:'flex-end'}}>
+                      <button className="btn btn-ghost btn-sm" onClick={()=>copy(f.f, f.f)}>Copy Filter</button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           ))}
@@ -569,7 +585,7 @@ function WiresharkTools() {
           {tsharkSubTab === 'builder' && (
             <div className="card fadein">
               <div className="card-title">TShark Command Builder</div>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20}}>
+              <div className="grid-mobile-1" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:20}}>
                 <div>
                   <div className="field">
                     <label className="label">Mode</label>

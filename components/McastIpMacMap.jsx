@@ -111,7 +111,7 @@ function McastIpMacMap() {
       {result && result.version === 4 && (
         <div className="card fadein">
           <div className="card-title">Mapping Result</div>
-          <div className="result-grid">
+          <div className="result-grid grid-mobile-1">
             <ResultItem label="IPv4 Address" value={result.ip} accent />
             <ResultItem label="Ethernet MAC" value={result.mac} green />
             <ResultItem label="Is Multicast" value={result.isMcast ? 'Yes (Class D)' : 'No'} red={!result.isMcast} />
@@ -157,7 +157,7 @@ function McastIpMacMap() {
         <div className="card fadein">
           <div className="card-title">Reverse Lookup — 32 Overlapping IPs</div>
           <div className="hint" style={{marginBottom:8}}>Only 23 of 28 Class D bits are carried in the MAC. The 5 lost bits (4 low bits of first octet + high bit of second octet) create 2⁵ = 32 possible IPs per MAC.</div>
-          <div className="table-wrap">
+          <div className="table-wrap hide-mobile">
             <table><thead><tr><th>#</th><th>IP Address</th><th>Scope</th><th></th></tr></thead>
             <tbody>
               {result.ips.map((ip, i) => {
@@ -173,6 +173,27 @@ function McastIpMacMap() {
               })}
             </tbody></table>
           </div>
+          {/* Mobile View */}
+          <div className="show-mobile mobile-cards">
+            {result.ips.map((ip, i) => {
+              const cls = Multicast.classifyIPv4(IPv4.parse(ip));
+              return (
+                <div key={i} className="mobile-card">
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">IP #{i+1}</span>
+                    <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{ip}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Scope</span>
+                    <span className="mobile-card-value">{cls ? cls.scope : '-'}</span>
+                  </div>
+                  <div style={{marginTop:8, display:'flex', justifyContent:'flex-end'}}>
+                    <CopyBtn text={ip} label="Copy IP" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
           <div className="btn-row">
             <button className="btn btn-ghost btn-sm" onClick={() => navigator.clipboard.writeText(result.ips.join('\n'))}>Copy All IPs</button>
             <button className="btn btn-ghost btn-sm" onClick={() => exportCSV(result.ips.map((ip,i) => { const c = Multicast.classifyIPv4(IPv4.parse(ip)); return {index:i+1,ip,scope:c?c.scope:'-',block:c?c.block:'-'}; }),'mcast-mac-ips.csv')}>Export CSV</button>
@@ -183,7 +204,7 @@ function McastIpMacMap() {
       {result && result.version === 6 && (
         <div className="card fadein">
           <div className="card-title">Mapping Result</div>
-          <div className="result-grid">
+          <div className="result-grid grid-mobile-1">
             <ResultItem label="IPv6 Address" value={result.compressed} accent />
             <ResultItem label="Expanded" value={result.expanded} />
             <ResultItem label="Ethernet MAC" value={result.mac} green />
@@ -214,7 +235,7 @@ function McastIpMacMap() {
       {result && result.version === 'range' && (
         <div className="card fadein">
           <div className="card-title">Range Map — {result.cidr}</div>
-          <div className="result-grid" style={{marginBottom:12}}>
+          <div className="result-grid grid-mobile-1" style={{marginBottom:12}}>
             <ResultItem label="CIDR" value={result.cidr} accent />
             <ResultItem label="Total Addresses" value={result.totalHosts.toLocaleString()} />
             <ResultItem label="First MAC" value={result.macFirst} green />
@@ -225,7 +246,7 @@ function McastIpMacMap() {
             }
           </div>
           {!result.showAll && <div className="hint" style={{marginBottom:8}}>Showing first 20 of {result.totalHosts.toLocaleString()} addresses (max {256} for display). Export CSV for full list.</div>}
-          <div className="table-wrap">
+          <div className="table-wrap hide-mobile">
             <table><thead><tr><th>#</th><th>IP Address</th><th>Ethernet MAC</th><th></th></tr></thead>
             <tbody>
               {result.entries.map((e, i) => (
@@ -237,6 +258,20 @@ function McastIpMacMap() {
                 </tr>
               ))}
             </tbody></table>
+          </div>
+          {/* Mobile View */}
+          <div className="show-mobile mobile-cards">
+            {result.entries.map((e, i) => (
+              <div key={i} className="mobile-card">
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">IP: {e.ip}</span>
+                  <span className="mobile-card-value" style={{color:'var(--green)', fontWeight:600}}>{e.mac}</span>
+                </div>
+                <div style={{marginTop:8, display:'flex', justifyContent:'flex-end'}}>
+                  <CopyBtn text={e.mac} label="Copy MAC" />
+                </div>
+              </div>
+            ))}
           </div>
           <div className="btn-row">
             <button className="btn btn-ghost btn-sm" onClick={() => {
@@ -254,7 +289,7 @@ function McastIpMacMap() {
 
       <div className="card fadein" style={{marginTop: result ? 0 : undefined}}>
         <div className="card-title">How Multicast MAC Mapping Works</div>
-        <div className="table-wrap" style={{marginBottom:12}}>
+        <div className="table-wrap hide-mobile" style={{marginBottom:12}}>
           <table>
             <thead><tr><th>Protocol</th><th>MAC Prefix</th><th>IP Bits Used</th><th>Ambiguity</th><th>RFC</th></tr></thead>
             <tbody>
@@ -272,10 +307,27 @@ function McastIpMacMap() {
                 <td style={{color:'var(--yellow)'}}>2^88 : 1 Overlap</td>
                 <td style={{color:'var(--dim)'}}><RFCLink rfc="RFC 2464" /></td>
               </tr>
-
-              </tbody>
-              </table>
+            </tbody>
+          </table>
+        </div>
+        {/* Mobile View */}
+        <div className="show-mobile mobile-cards" style={{marginBottom:12}}>
+          {[
+            {p:'IPv4 Multicast', pre:'01:00:5E', a:'32:1', rfc:'RFC 1112'},
+            {p:'IPv6 Multicast', pre:'33:33', a:'2^88:1', rfc:'RFC 2464'}
+          ].map(m => (
+            <div key={m.p} className="mobile-card">
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">{m.p}</span>
+                <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{m.pre}</span>
               </div>
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">Ambiguity / RFC</span>
+                <span className="mobile-card-value" style={{color:'var(--yellow)'}}>{m.a} ({m.rfc})</span>
+              </div>
+            </div>
+          ))}
+        </div>
               <div style={{background:'var(--panel)',border:'1px solid var(--border)',borderRadius:'var(--radius)',padding:'10px 14px'}}>
               <div style={{fontSize:12,color:'var(--muted)',lineHeight:1.6}}>
               <strong style={{color:'var(--text)'}}>IPv4 (32:1):</strong> Class D addresses (224.0.0.0–239.255.255.255) have 28 significant bits, but Ethernet MACs only carry 23 bits after the IANA prefix <code style={{color:'var(--cyan)'}}>01:00:5E</code>. This leaves 5 bits of ambiguity (2^5 = 32), meaning 32 different multicast IPs map to the same MAC.

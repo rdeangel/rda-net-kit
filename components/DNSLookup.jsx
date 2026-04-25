@@ -50,31 +50,65 @@ function DNSLookup() {
             <span className={`badge ${result.Status===0?'badge-green':'badge-red'}`}>{statusMap[result.Status] || result.Status}</span>
           </div>
           {result.Answer?.length ? (
-            <div className="table-wrap">
-              <table>
-                <thead><tr><th>Name</th><th>Type</th><th>TTL</th><th>Value</th><th></th></tr></thead>
-                <tbody>
-                  {result.Answer.map((r, i) => (
-                    <tr key={i}>
-                      <td style={{color:'var(--muted)'}}>{r.name}</td>
-                      <td><span className="badge badge-blue">{typeMap[r.type] || r.type}</span></td>
-                      <td style={{color:'var(--dim)'}}>{r.TTL}s</td>
-                      <td style={{color:'var(--cyan)'}}>{r.data}</td>
-                      <td><CopyBtn text={r.data} /></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <>
+              <div className="table-wrap hide-mobile">
+                <table>
+                  <thead><tr><th>Name</th><th>Type</th><th>TTL</th><th>Value</th><th></th></tr></thead>
+                  <tbody>
+                    {result.Answer.map((r, i) => (
+                      <tr key={i}>
+                        <td style={{color:'var(--muted)'}}>{r.name}</td>
+                        <td><span className="badge badge-blue">{typeMap[r.type] || r.type}</span></td>
+                        <td style={{color:'var(--dim)'}}>{r.TTL}s</td>
+                        <td style={{color:'var(--cyan)'}}>{r.data}</td>
+                        <td><CopyBtn text={r.data} /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {/* Mobile View */}
+              <div className="show-mobile mobile-cards">
+                {result.Answer.map((r, i) => (
+                  <div key={i} className="mobile-card">
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">{r.name}</span>
+                      <span className="badge badge-blue">{typeMap[r.type] || r.type}</span>
+                    </div>
+                    <div style={{paddingTop:6, fontFamily:'var(--mono)', fontSize:11, color:'var(--cyan)', wordBreak:'break-all'}}>
+                      {r.data}
+                    </div>
+                    <div style={{marginTop:8, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                      <span style={{fontSize:10, color:'var(--dim)'}}>TTL: {r.TTL}s</span>
+                      <CopyBtn text={r.data} label="Copy" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           ) : (
             <div style={{color:'var(--muted)',fontSize:13}}>No records found for type {type}.</div>
           )}
           {result.Authority?.length > 0 && (
             <>
               <div className="card-title" style={{marginTop:14}}>Authority Records</div>
-              <div className="table-wrap">
+              <div className="table-wrap hide-mobile">
                 <table><thead><tr><th>Name</th><th>Type</th><th>TTL</th><th>Value</th></tr></thead>
                 <tbody>{result.Authority.map((r,i) => <tr key={i}><td>{r.name}</td><td>{typeMap[r.type]||r.type}</td><td>{r.TTL}s</td><td style={{color:'var(--muted)'}}>{r.data}</td></tr>)}</tbody></table>
+              </div>
+              {/* Mobile View */}
+              <div className="show-mobile mobile-cards">
+                {result.Authority.map((r, i) => (
+                  <div key={i} className="mobile-card">
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">{r.name}</span>
+                      <span className="badge badge-gray">{typeMap[r.type] || r.type}</span>
+                    </div>
+                    <div style={{paddingTop:6, fontSize:11, color:'var(--muted)', wordBreak:'break-all'}}>
+                      {r.data}
+                    </div>
+                  </div>
+                ))}
               </div>
             </>
           )}

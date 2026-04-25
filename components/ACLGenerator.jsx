@@ -150,7 +150,8 @@ function ACLGenerator() {
               <option value="vyos">VyOS / Vyatta</option>
             </select></div>
         </div>
-        <div className="two-col">
+        <div className="two-col grid-mobile-1"
+>
           <div className="field"><label className="label">Rule Category</label>
             <select className="select" value={ruleType} onChange={e => setRuleType(e.target.value)}>
               <option value="filter">Firewall (Filter)</option>
@@ -163,7 +164,8 @@ function ACLGenerator() {
             <input className="input" value={iface} onChange={e => setIface(e.target.value)} placeholder="eth0" />
           </div>
         </div>
-        <div className="two-col">
+        <div className="two-col grid-mobile-1"
+>
           <div className="field"><label className="label">Action (Filter Only)</label>
             <div style={{display:'flex',gap:8}}>
               {[['permit','Permit'],['deny','Deny']].map(([v,l]) => (
@@ -177,7 +179,8 @@ function ACLGenerator() {
             </select></div>
         </div>
         {ruleType !== 'filter' && (
-          <div className="two-col">
+          <div className="two-col grid-mobile-1"
+>
             <div className="field"><label className="label">NAT Target IP</label>
               <input className="input" value={natTarget} onChange={e => setNatTarget(e.target.value)} placeholder="e.g. 1.2.3.4 or 192.168.1.50" />
             </div>

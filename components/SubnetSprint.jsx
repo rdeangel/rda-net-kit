@@ -278,7 +278,7 @@ function SubnetSprint() {
     <div className="fadein" style={{maxWidth:520, margin:'0 auto', textAlign:'center', padding:'40px 0'}}>
       <div style={{fontSize:42, fontWeight:900, fontFamily:'var(--mono)', color:'var(--green)', textShadow:'0 0 30px var(--green)', letterSpacing:3, marginBottom:8}}>SUBNET SPRINT</div>
       <div style={{color:'var(--muted)', fontSize:13, marginBottom:32}}>IPv4 subnetting · 10 levels · all multiple choice</div>
-      <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:32, textAlign:'left', maxWidth:400, margin:'0 auto 32px'}}>
+      <div className="grid-mobile-1" style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:32, textAlign:'left', maxWidth:400, margin:'0 auto 32px'}}>
         {[['❤️ 3 lives','Lose one on each wrong answer'],['🔥 Streak fire','×4 multiplier at max streak'],['⚡ 50/50','Once per game — remove 2 wrong options'],['📈 10 levels','Harder prefixes & shorter timer']].map(([t,d])=>(
           <div key={t} style={{background:'var(--panel)', border:'1px solid var(--border)', borderRadius:10, padding:'10px 12px'}}>
             <div style={{fontFamily:'var(--mono)', fontSize:12, color:'var(--green)', marginBottom:3}}>{t}</div>
@@ -286,7 +286,23 @@ function SubnetSprint() {
           </div>
         ))}
       </div>
-      <button onClick={startGame} style={{background:'var(--green)', color:'#000', border:'none', borderRadius:10, padding:'16px 52px', fontFamily:'var(--mono)', fontWeight:900, fontSize:18, cursor:'pointer', letterSpacing:3, boxShadow:'0 0 30px var(--green)55'}}>PLAY</button>
+      <button onClick={startGame} style={{
+        background:'var(--green)', 
+        color:'#000', 
+        border:'none', 
+        borderRadius:10, 
+        padding:'16px 52px', 
+        fontFamily:'var(--mono)', 
+        fontWeight:900, 
+        fontSize:18, 
+        cursor:'pointer', 
+        letterSpacing:3, 
+        boxShadow:'0 0 30px rgba(34, 197, 94, 0.4)',
+        transition:'transform 0.2s, box-shadow 0.2s'
+      }}
+      onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 0 40px rgba(34, 197, 94, 0.6)'; }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 0 30px rgba(34, 197, 94, 0.4)'; }}
+      >PLAY</button>
     </div>
   );
 
@@ -305,7 +321,7 @@ function SubnetSprint() {
     <div className="fadein" style={{maxWidth:500, margin:'0 auto', textAlign:'center', padding:'40px 0'}}>
       <div style={{fontSize:46, fontWeight:900, fontFamily:'var(--mono)', color:'var(--red)', marginBottom:6, textShadow:'0 0 30px var(--red)'}}>GAME OVER</div>
       <div style={{fontSize:30, color:'var(--green)', fontFamily:'var(--mono)', fontWeight:900, marginBottom:24}}>{score.toLocaleString()} pts</div>
-      <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, marginBottom:28}}>
+      <div className="grid-mobile-1" style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12, marginBottom:28}}>
         {[['LEVEL',String(level)],['ACCURACY',total>0?Math.round(correct/total*100)+'%':'—'],['BEST STREAK','×'+bestStreak]].map(([k,v])=>(
           <div key={k} style={{background:'var(--panel)', border:'1px solid var(--border)', borderRadius:10, padding:14}}>
             <div style={{fontSize:10, color:'var(--dim)', fontFamily:'var(--mono)', marginBottom:4}}>{k}</div>
@@ -358,7 +374,7 @@ function SubnetSprint() {
             )}
           </div>
         ) : (
-          <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:10}}>
+          <div className="grid-mobile-1" style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:10}}>
             {q.choices.map((c,i) => {
               const elim = eliminated.includes(i);
               return (

@@ -38,7 +38,7 @@ function SupernetCalc() {
       {result && (
         <div className="card fadein">
           <div className="card-title">Supernet / Summary Route</div>
-          <div className="result-grid" style={{marginBottom:16}}>
+          <div className="result-grid grid-mobile-1" style={{marginBottom:16}}>
             <ResultItem label="Supernet CIDR" value={result.supernet.cidr} accent />
             <ResultItem label="Network Address" value={result.supernet.networkStr} />
             <ResultItem label="Broadcast" value={result.supernet.broadcastStr} />
@@ -47,7 +47,7 @@ function SupernetCalc() {
             <ResultItem label="Prefix Length" value={`/${result.supernet.prefix}`} />
           </div>
           <div className="card-title">Input Networks</div>
-          <div className="table-wrap">
+          <div className="table-wrap hide-mobile">
             <table>
               <thead><tr><th>Network</th><th>First Host</th><th>Last Host</th><th>Hosts</th></tr></thead>
               <tbody>
@@ -56,6 +56,25 @@ function SupernetCalc() {
                 ))}
               </tbody>
             </table>
+          </div>
+          {/* Mobile View */}
+          <div className="show-mobile mobile-cards">
+            {result.networks.map((n, i) => (
+              <div key={i} className="mobile-card">
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">Network</span>
+                  <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{n.cidr}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">Range</span>
+                  <span className="mobile-card-value" style={{fontSize:11}}>{n.firstHostStr} - {n.lastHostStr}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">Usable Hosts</span>
+                  <span className="mobile-card-value" style={{color:'var(--green)'}}>{n.hostCount}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}

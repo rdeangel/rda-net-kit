@@ -56,7 +56,7 @@ function IPv6SubnetCalc() {
       {result && (
         <div className="card fadein">
           <div className="card-title">Subnet Information — /{result.prefix}</div>
-          <div className="result-grid">
+          <div className="result-grid grid-mobile-1">
             <ResultItem label="Network Address" value={result.networkStr} accent />
             <ResultItem label="Last Address" value={result.lastStr} red />
             <ResultItem label="Total Addresses" value={result.totalStr} />
@@ -67,12 +67,12 @@ function IPv6SubnetCalc() {
             <ResultItem label="RFC" value={result.info?.rfc || '-'} />
           </div>
           <div className="card-title" style={{marginTop:16}}>Expanded / Compressed</div>
-          <div className="result-grid">
+          <div className="result-grid grid-mobile-1">
             <ResultItem label="Full Expanded" value={result.expanded + `/${result.prefix}`} />
             <ResultItem label="Compressed" value={result.compressed + `/${result.prefix}`} accent />
           </div>
           <div className="card-title" style={{marginTop:16}}>Common Sub-prefixes from /{result.prefix}</div>
-          <div className="table-wrap">
+          <div className="table-wrap hide-mobile">
             <table><thead><tr><th>Prefix</th><th>Subnets</th><th>Addresses each</th></tr></thead>
             <tbody>
               {[4,8,16].map(delta => {
@@ -81,6 +81,25 @@ function IPv6SubnetCalc() {
                 return <tr key={delta}><td style={{color:'var(--cyan)'}}>/{np}</td><td>{Math.pow(2,delta).toLocaleString()}</td><td>{np<=64?`2^${128-np}`:np<=126?(Math.pow(2,128-np)).toLocaleString():np===127?'2':'1'}</td></tr>;
               }).filter(Boolean)}
             </tbody></table>
+          </div>
+          {/* Mobile View */}
+          <div className="show-mobile mobile-cards">
+            {[4,8,16].map(delta => {
+              const np = result.prefix + delta;
+              if (np > 128) return null;
+              return (
+                <div key={delta} className="mobile-card">
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Prefix</span>
+                    <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>/{np}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Count / Size</span>
+                    <span className="mobile-card-value">{Math.pow(2,delta).toLocaleString()} / {np<=64?`2^${128-np}`:np<=126?(Math.pow(2,128-np)).toLocaleString():np===127?'2':'1'}</span>
+                  </div>
+                </div>
+              );
+            }).filter(Boolean)}
           </div>
         </div>
       )}

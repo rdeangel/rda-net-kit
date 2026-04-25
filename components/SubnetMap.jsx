@@ -30,7 +30,7 @@ function SubnetMap() {
     <div className="fadein">
       <div className="card">
         <div className="card-title">Configuration</div>
-        <div className="two-col">
+        <div className="two-col grid-mobile-1">
           <div className="field"><label className="label">Parent Network</label>
             <input className="input" value={input} onChange={e => setInput(e.target.value)} placeholder="10.0.0.0/22" /></div>
           <div className="field"><label className="label">Split into /{splitTo}</label>
@@ -66,7 +66,7 @@ function SubnetMap() {
           </div>
           <div className="card fadein">
             <div className="card-title">Subnet Table ({result.subnets.length} subnets)</div>
-            <div className="table-wrap" style={{maxHeight:400,overflowY:'auto'}}>
+            <div className="table-wrap hide-mobile" style={{maxHeight:400,overflowY:'auto'}}>
               <table>
                 <thead><tr><th>#</th><th>Network</th><th>CIDR</th><th>First Host</th><th>Last Host</th><th>Broadcast</th><th>Hosts</th></tr></thead>
                 <tbody>
@@ -83,6 +83,29 @@ function SubnetMap() {
                   ))}
                 </tbody>
               </table>
+            </div>
+            {/* Mobile View */}
+            <div className="show-mobile mobile-cards" style={{maxHeight:400, overflowY:'auto'}}>
+              {result.subnets.map((sn, i) => (
+                <div key={i} className="mobile-card" style={{borderLeft:`3px solid ${COLORS[i%COLORS.length]}`}}>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Subnet {i+1}</span>
+                    <span className="mobile-card-value" style={{color:`${COLORS[i%COLORS.length]}`, fontWeight:600}}>{sn.networkStr}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">CIDR</span>
+                    <span className="mobile-card-value">{sn.cidr}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Range</span>
+                    <span className="mobile-card-value" style={{fontSize:10}}>{sn.firstHostStr} - {sn.lastHostStr}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Hosts</span>
+                    <span className="mobile-card-value" style={{color:'var(--green)'}}>{sn.hostCount}</span>
+                  </div>
+                </div>
+              ))}
             </div>
             <div className="btn-row">
               <button className="btn btn-ghost btn-sm" onClick={() => exportCSV(result.subnets.map((sn,i)=>({index:i+1,cidr:sn.cidr,network:sn.networkStr,firstHost:sn.firstHostStr,lastHost:sn.lastHostStr,broadcast:sn.broadcastStr,hosts:sn.hostCount})),'subnet-map.csv')}>Export CSV</button>

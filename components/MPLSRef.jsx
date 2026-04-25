@@ -86,7 +86,7 @@ function MPLSRef() {
       </div>
 
       {/* Packet stack */}
-      <div className="two-col">
+      <div className="two-col grid-mobile-1">
         <div className="card">
           <div className="card-title">MPLS Encapsulation Stack</div>
           <div style={{display:'flex', flexDirection:'column', gap:2}}>
@@ -104,12 +104,13 @@ function MPLSRef() {
                 borderRadius:4, padding:'7px 12px',
                 display:'flex', justifyContent:'space-between', alignItems:'center',
                 borderStyle: row.dashed ? 'dashed' : 'solid',
+                gap: 12
               }}>
-                <div>
+                <div style={{minWidth:0, flex:1}}>
                   <div style={{fontSize:12, fontWeight: row.highlight ? 700 : 400, color: row.highlight ? row.color : 'var(--text)'}}>{row.label}</div>
-                  <div style={{fontSize:10, color:'var(--dim)', marginTop:1}}>{row.note}</div>
+                  <div style={{fontSize:10, color:'var(--dim)', marginTop:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{row.note}</div>
                 </div>
-                <div style={{fontSize:12, color:'var(--dim)', fontFamily:'var(--mono)', whiteSpace:'nowrap', marginLeft:12}}>{row.bytes}</div>
+                <div style={{fontSize:12, color:'var(--dim)', fontFamily:'var(--mono)', whiteSpace:'nowrap', flexShrink:0}}>{row.bytes}</div>
               </div>
             ))}
           </div>
@@ -137,7 +138,7 @@ function MPLSRef() {
       </div>
 
       {/* Reserved labels + key protocols */}
-      <div className="two-col">
+      <div className="two-col grid-mobile-1">
         <div className="card">
           <div className="card-title">Reserved Label Values (0–15)</div>
           <div style={{display:'flex', flexDirection:'column', gap:4}}>

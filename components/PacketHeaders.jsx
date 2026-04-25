@@ -135,10 +135,12 @@ function PacketHeaders() {
         </div>
       </div>
 
-      <div className="two-col" style={{alignItems:'stretch'}}>
-        <div className="card fadein" style={{flex:2}}>
+      <div className="two-col grid-mobile-1" style={{alignItems:'stretch'}}>
+        <div className="card fadein" style={{flex:2, overflowX:'auto'}}>
           <div className="card-title">{current.title} <span style={{fontSize:11,color:'var(--dim)',marginLeft:8}}>(Click fields to edit)</span></div>
-          <div style={{display:'flex',flexDirection:'column',gap:1,border:'1px solid var(--border)',borderRadius:8,overflow:'hidden',background:'var(--border)'}}>
+          
+          {/* Desktop/Tablet: 32-bit wide grid */}
+          <div className="hide-mobile" style={{display:'flex',flexDirection:'column',gap:1,border:'1px solid var(--border)',borderRadius:8,overflow:'hidden',background:'var(--border)'}}>
             <div style={{display:'flex',background:'var(--card)',fontSize:9,color:'var(--dim)',padding:'2px 4px',borderBottom:'1px solid var(--border)'}}>
               {Array.from({length:32}).map((_,i) => (
                 <div key={i} style={{flex:1,textAlign:'center'}}>{i}</div>
@@ -172,17 +174,48 @@ function PacketHeaders() {
             ))}
           </div>
 
+          {/* Mobile: Vertical List of Fields */}
+          <div className="show-mobile" style={{display:'grid', gridTemplateColumns:'1fr', gap:6}}>
+             {current.rows.flat().map((field, fi) => {
+                const val = fieldValues[field.id] || 0;
+                const displayVal = field.isIP ? IPv4.str(val) :
+                                  field.isFlags ? `0x${val.toString(16).toUpperCase()}` :
+                                  val.toString();
+                const isSelected = selectedField?.id === field.id;
+                return (
+                  <div key={fi} 
+                    style={{
+                      borderLeft: `3px solid ${field.color}`, 
+                      cursor:'pointer',
+                      background: isSelected ? `${field.color}11` : 'var(--panel)',
+                      border: `1px solid ${isSelected ? field.color : 'var(--border)'}`,
+                      borderRadius: 6,
+                      padding: '6px 8px',
+                      minWidth: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center'
+                    }}
+                    onClick={() => setSelectedField(field)}
+                  >
+                    <div style={{fontSize:9, color:field.color, textTransform:'uppercase', fontWeight:700, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'}}>{field.name}</div>
+                    <div style={{fontSize:10, color:'var(--text)', fontWeight:700, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'}}>{displayVal}</div>
+                  </div>
+                );
+             })}
+          </div>
+
           <div style={{marginTop:16}}>
             <div className="card-title" style={{fontSize:13}}>Wire Format (Raw Data)</div>
             <div style={{background:'var(--panel)',border:'1px solid var(--border)',borderRadius:6,padding:12,fontFamily:'var(--mono)',fontSize:12}}>
               <div style={{marginBottom:8, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                <div>
+                <div style={{minWidth:0, flex:1}}>
                   <span style={{color:'var(--dim)',display:'inline-block',width:40}}>HEX</span>
                   <span style={{color:'var(--cyan)',wordBreak:'break-all'}}>{wire.hex}</span>
                 </div>
-                <button className="btn btn-ghost btn-sm" style={{padding:'2px 8px', fontSize:10}} onClick={() => navigator.clipboard.writeText(wire.hex.replace(/\s/g,''))}>Copy Hex</button>
+                <button className="btn btn-ghost btn-sm" style={{padding:'2px 8px', fontSize:10, flexShrink:0, marginLeft:8}} onClick={() => navigator.clipboard.writeText(wire.hex.replace(/\s/g,''))}>Copy Hex</button>
               </div>
-              <div>
+              <div style={{minWidth:0}}>
                 <span style={{color:'var(--dim)',display:'inline-block',width:40}}>BIN</span>
                 <span style={{color:'var(--muted)',fontSize:10,wordBreak:'break-all'}}>{wire.bin}</span>
               </div>
@@ -200,7 +233,7 @@ function PacketHeaders() {
                 navigator.clipboard.writeText(scapy);
               }}>Copy Snippet</button>
             </div>
-            <div style={{background:'var(--panel)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',fontFamily:'var(--mono)',fontSize:11,color:'var(--green)'}}>
+            <div style={{background:'var(--panel)',border:'1px solid var(--border)',borderRadius:6,padding:'8px 12px',fontFamily:'var(--mono)',fontSize:11,color:'var(--green)', whiteSpace:'pre-wrap', wordBreak:'break-all'}}>
               <span style={{color:'var(--muted)'}}># Import and send the custom header</span><br/>
               <span style={{color:'var(--purple)'}}>from</span> scapy.all <span style={{color:'var(--purple)'}}>import</span> *<br/>
               pkt = {activeHeader === 'ipv4' ? 'IP' : activeHeader === 'ipv6' ? 'IPv6' : activeHeader === 'tcp' ? 'TCP' : 'UDP'}(bytes.fromhex(<span style={{color:'var(--yellow)'}}>{`"${wire.hex.replace(/\s/g,'')}"`}</span>))<br/>
@@ -209,7 +242,7 @@ function PacketHeaders() {
           </div>
         </div>
 
-        <div className="card fadein" style={{flex:1,minWidth:280}}>
+        <div className="card fadein" style={{flex:1, minWidth:0}}>
           <div className="card-title">Field Details</div>
           {selectedField ? (
             <div className="fadein">
@@ -245,16 +278,16 @@ function PacketHeaders() {
                     }} />
                 ) : (
                   <div className="field">
-                    <div className="input-row">
+                    <div className="input-row grid-mobile-1">
                       <input className="input" type="number"
                         min="0" max={Math.pow(2, selectedField.bits)-1}
                         value={fieldValues[selectedField.id] || 0}
                         onChange={e => updateVal(selectedField.id, parseInt(e.target.value) || 0)} />
                     </div>
                     {selectedField.name.toLowerCase().includes('port') && (
-                      <div className="btn-row" style={{marginTop:8}}>
+                      <div className="btn-row grid-mobile-1" style={{marginTop:8, display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(60px, 1fr))', gap:4}}>
                         {[80, 443, 53, 22, 21, 23, 25, 110, 143, 3306, 3389, 5060].map(p => (
-                          <button key={p} className="btn btn-ghost btn-sm" onClick={() => updateVal(selectedField.id, p)}>{p}</button>
+                          <button key={p} className="btn btn-ghost btn-sm" style={{padding:'4px 2px'}} onClick={() => updateVal(selectedField.id, p)}>{p}</button>
                         ))}
                       </div>
                     )}
@@ -271,11 +304,11 @@ function PacketHeaders() {
       </div>
 
       <style>{`
-        .tab-row { display: flex; gap: 8px; margin-top: 12px; }
+        .tab-row { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 4px; }
         .tab-btn {
           padding: 8px 16px; border: 1px solid var(--border); background: var(--panel);
           color: var(--muted); border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;
-          transition: all 0.2s;
+          transition: all 0.2s; white-space: nowrap;
         }
         .tab-btn:hover { background: var(--card); color: var(--text); }
         .tab-btn.active { background: var(--cyan); color: var(--btn-text); border-color: var(--cyan); }

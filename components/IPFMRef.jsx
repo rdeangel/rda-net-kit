@@ -76,7 +76,7 @@ function IPFMRef() {
         <div style={{fontSize:13, color:'var(--muted)', lineHeight:1.6, marginBottom:16}}>
           IPFM is a Cisco Nexus-based fabric designed for professional SDI-to-IP migration. It replaces traditional crosspoint routers with a deterministic, high-bandwidth IP network using SMPTE ST 2110 for essence flows and ST 2022-7 for redundancy.
         </div>
-        <div className="result-grid">
+        <div className="result-grid grid-mobile-1">
           <ResultItem label="Sync Standard" value="IEEE 1588 (PTPv2)" accent />
           <ResultItem label="Broadcast Profile" value="SMPTE 2059-2" />
           <ResultItem label="Media Standards" value="ST 2110 / ST 2022-6" green />
@@ -84,7 +84,7 @@ function IPFMRef() {
         </div>
       </div>
 
-      <div className="two-col">
+      <div className="two-col grid-mobile-1">
         <div className="card">
           <div className="card-title">Precision Time Protocol (PTP)</div>
           <div style={{fontSize:12, color:'var(--muted)', lineHeight:1.6}}>
@@ -131,70 +131,72 @@ function IPFMRef() {
         <div style={{fontSize:12, color:'var(--muted)', lineHeight:1.5, marginBottom:14}}>
           The PTP hierarchy is determined by the Best Master Clock Algorithm (BMCA). Lower priority values win GM election. Each Boundary Clock terminates and regenerates PTP, isolating downstream devices from upstream jitter. In IPFM, the GM (a dedicated GPS appliance) connects <em>directly into the Spine layer</em> — Spines are the first BC tier and the diagram correctly shows the GM above them.
         </div>
-        <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:8, padding:20, background:'var(--panel)', borderRadius:8, border:'1px solid var(--border)'}}>
-          {/* Tier 0 — GM */}
-          <div style={{display:'flex', gap:20, alignItems:'center'}}>
-            <div style={{padding:'8px 14px', background:'var(--red)', color:'#000', borderRadius:4, fontWeight:700, fontSize:11, border:'2px solid #fff'}}>
-              GM — Grandmaster (GPS)
-              <div style={{fontSize:9, fontWeight:400, marginTop:2, opacity:0.8}}>Ordinary Clock • priority1: 1-127 • Clock Class: 6</div>
+        <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:8, padding:20, background:'var(--panel)', borderRadius:8, border:'1px solid var(--border)', overflowX:'auto'}}>
+          <div style={{minWidth:500, display:'flex', flexDirection:'column', alignItems:'center', gap:8}}>
+            {/* Tier 0 — GM */}
+            <div style={{display:'flex', gap:20, alignItems:'center'}}>
+              <div style={{padding:'8px 14px', background:'var(--red)', color:'#000', borderRadius:4, fontWeight:700, fontSize:11, border:'2px solid #fff'}}>
+                GM — Grandmaster (GPS)
+                <div style={{fontSize:9, fontWeight:400, marginTop:2, opacity:0.8}}>Ordinary Clock • priority1: 1-127 • Clock Class: 6</div>
+              </div>
             </div>
-          </div>
-          <div style={{display:'flex', alignItems:'center', gap:6}}>
-            <div style={{width:2, height:20, background:'var(--red)'}} />
-            <div style={{fontSize:9, color:'var(--red)', fontFamily:'var(--mono)'}}>Sync / Announce / Delay_Req</div>
-            <div style={{width:2, height:20, background:'var(--red)'}} />
-          </div>
-          {/* Tier 1 — Spine BC */}
-          <div style={{padding:'10px 20px', background:'var(--card)', border:'1px solid var(--cyan)', borderRadius:6, fontWeight:600, fontSize:12, color:'var(--cyan)'}}>
-            Spine — Boundary Clock (Slave upstream, Master downstream)
-            <div style={{fontSize:9, fontWeight:400, color:'var(--dim)', marginTop:2}}>priority1: 128 • Terminates PTP from GM • Serves time to all Leafs</div>
-          </div>
-          <div style={{display:'flex', gap:80, marginTop:-4}}>
-            <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-              <div style={{width:2, height:18, background:'var(--dim)', transform:'rotate(25deg)'}} />
-              <div style={{fontSize:8, color:'var(--dim)', fontFamily:'var(--mono)'}}>Slave port</div>
+            <div style={{display:'flex', alignItems:'center', gap:6}}>
+              <div style={{width:2, height:20, background:'var(--red)'}} />
+              <div style={{fontSize:9, color:'var(--red)', fontFamily:'var(--mono)'}}>Sync / Announce / Delay_Req</div>
+              <div style={{width:2, height:20, background:'var(--red)'}} />
             </div>
-            <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-              <div style={{width:2, height:18, background:'var(--dim)', transform:'rotate(-25deg)'}} />
-              <div style={{fontSize:8, color:'var(--dim)', fontFamily:'var(--mono)'}}>Slave port</div>
+            {/* Tier 1 — Spine BC */}
+            <div style={{padding:'10px 20px', background:'var(--card)', border:'1px solid var(--cyan)', borderRadius:6, fontWeight:600, fontSize:12, color:'var(--cyan)'}}>
+              Spine — Boundary Clock (Slave upstream, Master downstream)
+              <div style={{fontSize:9, fontWeight:400, color:'var(--dim)', marginTop:2}}>priority1: 128 • Terminates PTP from GM • Serves time to all Leafs</div>
             </div>
-          </div>
-          {/* Tier 2 — Leaf BC */}
-          <div style={{display:'flex', gap:30}}>
-             <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-               <div style={{padding:'8px 14px', border:'1px solid var(--cyan)', borderRadius:4, fontSize:11, fontWeight:500, textAlign:'center'}}>
-                 Leaf — Boundary Clock
-                 <div style={{fontSize:9, fontWeight:400, color:'var(--dim)', marginTop:2}}>priority1: 128 • Master to endpoints</div>
+            <div style={{display:'flex', gap:80, marginTop:-4}}>
+              <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                <div style={{width:2, height:18, background:'var(--dim)', transform:'rotate(25deg)'}} />
+                <div style={{fontSize:8, color:'var(--dim)', fontFamily:'var(--mono)'}}>Slave port</div>
+              </div>
+              <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                <div style={{width:2, height:18, background:'var(--dim)', transform:'rotate(-25deg)'}} />
+                <div style={{fontSize:8, color:'var(--dim)', fontFamily:'var(--mono)'}}>Slave port</div>
+              </div>
+            </div>
+            {/* Tier 2 — Leaf BC */}
+            <div style={{display:'flex', gap:30}}>
+               <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                 <div style={{padding:'8px 14px', border:'1px solid var(--cyan)', borderRadius:4, fontSize:11, fontWeight:500, textAlign:'center'}}>
+                   Leaf — Boundary Clock
+                   <div style={{fontSize:9, fontWeight:400, color:'var(--dim)', marginTop:2}}>priority1: 128 • Master to endpoints</div>
+                 </div>
+                 <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                   <div style={{width:2, height:14, background:'var(--dim)'}} />
+                   <div style={{fontSize:8, color:'var(--dim)', fontFamily:'var(--mono)'}}>Master ports</div>
+                 </div>
+                 <div style={{padding:'6px 10px', background:'rgba(0,212,200,0.08)', border:'1px solid var(--border)', borderRadius:4, fontSize:10, color:'var(--muted)'}}>
+                   Endpoints (Ordinary Clock Slaves)
+                   <div style={{fontSize:8, color:'var(--dim)'}}>Cameras, Mixers, Encoders (ST 2110)</div>
+                 </div>
                </div>
                <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-                 <div style={{width:2, height:14, background:'var(--dim)'}} />
-                 <div style={{fontSize:8, color:'var(--dim)', fontFamily:'var(--mono)'}}>Master ports</div>
+                 <div style={{padding:'8px 14px', border:'1px solid var(--cyan)', borderRadius:4, fontSize:11, fontWeight:500, textAlign:'center'}}>
+                   Leaf — Boundary Clock
+                   <div style={{fontSize:9, fontWeight:400, color:'var(--dim)', marginTop:2}}>priority1: 128 • Master to endpoints</div>
+                 </div>
+                 <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+                   <div style={{width:2, height:14, background:'var(--dim)'}} />
+                   <div style={{fontSize:8, color:'var(--dim)', fontFamily:'var(--mono)'}}>Master ports</div>
+                 </div>
+                 <div style={{padding:'6px 10px', background:'rgba(0,212,200,0.08)', border:'1px solid var(--border)', borderRadius:4, fontSize:10, color:'var(--muted)'}}>
+                   Endpoints (Ordinary Clock Slaves)
+                   <div style={{fontSize:8, color:'var(--dim)'}}>Monitors, Decoders, Audio (AES67)</div>
+                 </div>
                </div>
-               <div style={{padding:'6px 10px', background:'rgba(0,212,200,0.08)', border:'1px solid var(--border)', borderRadius:4, fontSize:10, color:'var(--muted)'}}>
-                 Endpoints (Ordinary Clock Slaves)
-                 <div style={{fontSize:8, color:'var(--dim)'}}>Cameras, Mixers, Encoders (ST 2110)</div>
-               </div>
-             </div>
-             <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-               <div style={{padding:'8px 14px', border:'1px solid var(--cyan)', borderRadius:4, fontSize:11, fontWeight:500, textAlign:'center'}}>
-                 Leaf — Boundary Clock
-                 <div style={{fontSize:9, fontWeight:400, color:'var(--dim)', marginTop:2}}>priority1: 128 • Master to endpoints</div>
-               </div>
-               <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-                 <div style={{width:2, height:14, background:'var(--dim)'}} />
-                 <div style={{fontSize:8, color:'var(--dim)', fontFamily:'var(--mono)'}}>Master ports</div>
-               </div>
-               <div style={{padding:'6px 10px', background:'rgba(0,212,200,0.08)', border:'1px solid var(--border)', borderRadius:4, fontSize:10, color:'var(--muted)'}}>
-                 Endpoints (Ordinary Clock Slaves)
-                 <div style={{fontSize:8, color:'var(--dim)'}}>Monitors, Decoders, Audio (AES67)</div>
-               </div>
-             </div>
-          </div>
-          {/* Notes */}
-          <div style={{marginTop:12, display:'flex', gap:20, fontSize:10, color:'var(--dim)'}}>
-            <div style={{display:'flex', gap:4, alignItems:'center'}}><div style={{width:8, height:3, background:'var(--red)', borderRadius:1}} /> Sync flow direction</div>
-            <div>Dual-plane A/B fabrics required for ST 2022-7 seamless protection</div>
-            <div>Offset from Master &lt; 100ns = healthy sync</div>
+            </div>
+            {/* Notes */}
+            <div className="grid-mobile-1" style={{marginTop:12, display:'flex', gap:20, fontSize:10, color:'var(--dim)'}}>
+              <div style={{display:'flex', gap:4, alignItems:'center'}}><div style={{width:8, height:3, background:'var(--red)', borderRadius:1}} /> Sync flow direction</div>
+              <div>Dual-plane A/B fabrics required for ST 2022-7 seamless protection</div>
+              <div>Offset from Master &lt; 100ns = healthy sync</div>
+            </div>
           </div>
         </div>
       </div>
@@ -314,19 +316,19 @@ function IPFMRef() {
 
       <div className="card">
         <div className="card-title">Nexus 9000 IPFM Configuration & Monitoring</div>
-        <div className="result-grid" style={{gridTemplateColumns:'repeat(auto-fill, minmax(400px, 1fr))'}}>
+        <div className="result-grid grid-mobile-1">
           {commands.map(g => (
             <div key={g.cat} style={{background:'var(--panel)', padding:16, borderRadius:8, border:'1px solid var(--border)'}}>
               <div style={{fontSize:11, fontWeight:700, color:'var(--cyan)', textTransform:'uppercase', letterSpacing:1, marginBottom:12}}>{g.cat}</div>
               <div style={{display:'flex', flexDirection:'column', gap:12}}>
                 {g.cmds.map(c => (
                   <div key={c.c} style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:10}}>
-                    <div style={{flex:1}}>
-                      <div style={{fontFamily:'var(--mono)', color:'var(--green)', fontSize:12, marginBottom:4, whiteSpace:'pre-wrap'}}>{c.c}</div>
-                      <div style={{fontSize:11, color:'var(--dim)'}}>{c.d}</div>
+                    <div style={{flex:1, minWidth:0}}>
+                      <div style={{fontFamily:'var(--mono)', color:'var(--green)', fontSize:12, marginBottom:4, whiteSpace:'pre-wrap', wordBreak:'break-all'}}>{c.c}</div>
+                      <div style={{fontSize:11, color:'var(--dim)', lineHeight:1.4}}>{c.d}</div>
                     </div>
                     <button className={`btn btn-ghost btn-sm ${copied === c.c ? 'badge-green' : ''}`}
-                            style={{padding:'2px 6px', fontSize:10}}
+                            style={{padding:'2px 6px', fontSize:10, flexShrink:0}}
                             onClick={() => copy(c.c)}>
                       {copied === c.c ? '✓' : 'Copy'}
                     </button>

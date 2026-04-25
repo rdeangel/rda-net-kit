@@ -50,7 +50,7 @@ function IPClassifier() {
             <div className="card-title" style={{marginBottom:0}}>Results ({results.length})</div>
             <button className="btn btn-ghost btn-sm" onClick={() => setResults([])}>Clear All</button>
           </div>
-          <div className="table-wrap">
+          <div className="table-wrap hide-mobile">
             <table>
               <thead><tr><th>IP Address</th><th>Ver</th><th>Class</th><th>Type</th><th>Scope</th><th>RFC</th><th></th></tr></thead>
               <tbody>
@@ -67,6 +67,28 @@ function IPClassifier() {
                 ))}
               </tbody>
             </table>
+          </div>
+          {/* Mobile View */}
+          <div className="show-mobile mobile-cards">
+            {results.map((r, i) => (
+              <div key={i} className="mobile-card">
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label" style={{color:'var(--cyan)', fontWeight:600}}>{r.ip}</span>
+                  <span className={`badge ${r.version===4?'badge-blue':'badge-purple'}`}>IPv{r.version}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">Type / Class</span>
+                  <span className="mobile-card-value">{r.type} {r.ipClass ? `(Class ${r.ipClass})` : ''}</span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">Scope / RFC</span>
+                  <span className="mobile-card-value">{scopeBadge(r.scope)} (<RFCLink rfc={r.rfc} />)</span>
+                </div>
+                <div style={{marginTop:8, display:'flex', justifyContent:'flex-end'}}>
+                  <button className="btn btn-ghost btn-sm" style={{color:'var(--red)'}} onClick={() => setResults(rs => rs.filter((_,j) => j !== i))}>Remove</button>
+                </div>
+              </div>
+            ))}
           </div>
           <div className="btn-row">
             <button className="btn btn-ghost btn-sm" onClick={() => exportCSV(results.map(r => ({ip:r.ip,version:r.version,class:r.ipClass||'-',type:r.type,scope:r.scope,rfc:r.rfc||'-'})),'ip-classification.csv')}>Export CSV</button>

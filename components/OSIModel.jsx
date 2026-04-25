@@ -15,7 +15,7 @@ function OSIModel() {
     <div className="fadein">
       <div className="card">
         <div className="card-title">Layer Comparison Matrix</div>
-        <div className="table-wrap">
+        <div className="table-wrap hide-mobile">
           <table className="osi-table">
             <thead>
               <tr>
@@ -58,9 +58,27 @@ function OSIModel() {
             </tbody>
           </table>
         </div>
+        {/* Mobile View */}
+        <div className="show-mobile mobile-cards">
+          {data.map(l => (
+            <div key={l.osi} className="mobile-card" style={{borderLeft:`4px solid var(--layer-${l.osi})`}}>
+              <div className="mobile-card-row">
+                <span className="mobile-card-label" style={{color:`var(--layer-${l.osi})`, fontWeight:700}}>Layer {l.osi}</span>
+                <span className="mobile-card-value" style={{fontWeight:600}}>{l.name}</span>
+              </div>
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">PDU / TCP-IP</span>
+                <span className="mobile-card-value">{l.pdu} {l.tcp ? `(${l.tcp})` : ''}</span>
+              </div>
+              <div className="mobile-card-row" style={{borderBottom:'none'}}>
+                <span className="mobile-card-value" style={{textAlign:'left', paddingLeft:0, color:'var(--dim)', fontSize:11}}>{l.examples}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-
-      <div className="two-col">
+...
+      <div className="two-col grid-mobile-1">
         <div className="card">
           <div className="card-title">Encapsulation Flow</div>
           <div style={{display:'flex',flexDirection:'column',gap:8}}>

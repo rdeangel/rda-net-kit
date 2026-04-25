@@ -23,7 +23,8 @@ function VPNArchitect() {
           IPsec (Internet Protocol Security) is a suite of protocols used to secure IP communications by authenticating and encrypting each IP packet in a communication session.
         </div>
 
-        <div className="two-col" style={{gap:16}}>
+        <div className="two-col grid-mobile-1"
+ style={{gap:16}}>
           <div style={{background:'var(--panel)', padding:16, borderRadius:8, border:'1px solid var(--border)'}}>
             <div style={{fontSize:11, fontWeight:700, color:'var(--cyan)', textTransform:'uppercase', letterSpacing:1, marginBottom:12}}>Phase 1: IKE SA</div>
             <div style={{fontSize:12, color:'var(--muted)', lineHeight:1.6}}>
@@ -51,7 +52,8 @@ function VPNArchitect() {
         </div>
       </div>
 
-      <div className="two-col">
+      <div className="two-col grid-mobile-1"
+>
         <div className="card">
           <div className="card-title">DH Group Reference</div>
           <div className="field">
@@ -72,7 +74,7 @@ function VPNArchitect() {
 
         <div className="card">
           <div className="card-title">IKEv1 vs IKEv2 Comparison</div>
-          <div className="table-wrap">
+          <div className="table-wrap hide-mobile">
             <table style={{fontSize:11}}>
               <thead>
                 <tr>
@@ -110,12 +112,32 @@ function VPNArchitect() {
               </tbody>
             </table>
           </div>
+          {/* Mobile View */}
+          <div className="show-mobile mobile-cards">
+            {[
+              {f:'Complexity', v1:'High (Multi)', v2:'Low (Unified)'},
+              {f:'Exchange', v1:'6-9 Msg', v2:'4 Messages'},
+              {f:'NAT-T', v1:'Optional', v2:'Built-in'},
+              {f:'Reliability', v1:'No Seq #', v2:'Seq & Ack'}
+            ].map(r => (
+              <div key={r.f} className="mobile-card">
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">{r.f}</span>
+                  <span className="mobile-card-value" style={{fontWeight:600}}>{r.v2} <span style={{fontWeight:400, color:'var(--muted)'}}>(v2)</span></span>
+                </div>
+                <div className="mobile-card-row">
+                  <span className="mobile-card-value" style={{marginLeft:'auto', color:'var(--dim)'}}>{r.v1} <span style={{fontWeight:400, color:'var(--muted)'}}>(v1)</span></span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       <div className="card">
         <div className="card-title">IPsec Protocol Comparison</div>
-        <div className="two-col" style={{gap:20}}>
+        <div className="two-col grid-mobile-1"
+ style={{gap:20}}>
           <div style={{background:'var(--panel)', padding:16, borderRadius:8, border:'1px solid var(--border)'}}>
             <div style={{fontSize:12, fontWeight:700, color:'var(--yellow)', marginBottom:8}}>ESP (Encapsulating Security Payload)</div>
             <div style={{fontSize:11, color:'var(--muted)', lineHeight:1.6}}>

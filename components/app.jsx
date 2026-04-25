@@ -91,6 +91,7 @@ function App() {
   };
 
   const [activeTool, setActiveTool] = useState(getInitialTool);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [shareData, setShareData] = useState(null);
@@ -143,6 +144,7 @@ function App() {
     setActiveTool(item.id);
     setShowSearch(false);
     setSearchQuery('');
+    setIsSidebarOpen(false);
   };
   const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
   const [showTweaks, setShowTweaks] = useState(false);
@@ -155,6 +157,16 @@ function App() {
   useEffect(() => {
     localStorage.setItem('ip-tool-active', activeTool);
   }, [activeTool]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && isSidebarOpen) {
+        setIsSidebarOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isSidebarOpen]);
 
   // Tweaks protocol
   useEffect(() => {
@@ -229,7 +241,8 @@ function App() {
       case 'wireshark':      return <WiresharkTools />;
       case 'systools':       return <SysToolBuilder />;
       case 'cypher':         return <CypherDeck />;
-      case 'proto-ref':     return <RoutingReference />;      case 'vpn-ref':   return <VPNArchitect />;
+      case 'proto-ref':     return <RoutingReference />;
+      case 'vpn-ref':   return <VPNArchitect />;
       case 'qos-tool':  return <QoSDSCPTool />;
       case 'wlan-tool': return <WLANPlanner />;
       case 'wifi-qr':   return <WifiQRCode />;
@@ -250,8 +263,11 @@ function App() {
   return (
     <div className="app">
       <header className="header">
+        <button className="mobile-menu-toggle" onClick={() => setIsSidebarOpen(true)}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
         {/* Left: Logo area with fixed width matching sidebar and vertical divider */}
-        <div style={{width:'var(--sidebar)', borderRight:'1px solid var(--border)', display:'flex', alignItems:'center', padding:'0 16px', flexShrink:0}}>
+        <div className="logo-area">
           <div className="logo">
             <div className="logo-icon" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -309,45 +325,70 @@ function App() {
       </header>
 
       <div className="main-layout">
-        <aside className="sidebar">
+        {isSidebarOpen && <div className="sidebar-overlay" onClick={() => setIsSidebarOpen(false)} />}
+        <aside className={`sidebar ${isSidebarOpen ? 'is-open' : ''}`}>
+          <div className="sidebar-mobile-header">
+            <div className="logo">
+              <div className="logo-icon" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2L22 12L12 22L2 12Z" fill="rgba(0, 212, 200, 0.1)" />
+                  <line x1="12" y1="2" x2="12" y2="22" strokeOpacity="0.4" />
+                  <line x1="2" y1="12" x2="22" y2="12" strokeOpacity="0.4" />
+                  <line x1="12" y1="12" x2="12" y2="2" strokeOpacity="0.6" />
+                  <line x1="12" y1="12" x2="22" y2="12" strokeOpacity="0.6" />
+                  <line x1="12" y1="12" x2="12" y2="22" strokeOpacity="0.6" />
+                  <line x1="12" y1="12" x2="2" y2="12" strokeOpacity="0.6" />
+                  <circle cx="12" cy="12" r="3" fill="currentColor" />
+                  <circle cx="12" cy="2" r="1.5" fill="currentColor" />
+                  <circle cx="22" cy="12" r="1.5" fill="currentColor" />
+                  <circle cx="12" cy="22" r="1.5" fill="currentColor" />
+                  <circle cx="2" cy="12" r="1.5" fill="currentColor" />
+                </svg>
+              </div>
+              <div style={{marginLeft:10, fontWeight:700, letterSpacing:'-0.01em', fontSize:15, color:'var(--text)'}}>RDA Net Kit</div>
+            </div>
+            <button className="sidebar-close" onClick={() => setIsSidebarOpen(false)}>X</button>
+          </div>
           <div className="sidebar-search">
             <div className="search-input-wrapper">
               <svg className="search-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               <input className="search-input" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search..." />
               {searchQuery && (
-                <div className="search-clear" onClick={() => setSearchQuery('')}>✕</div>
+                <div className="search-clear" onClick={() => setSearchQuery('')}>X</div>
               )}
             </div>
           </div>
 
-          {navTypes.map(type => {
-            const typeItems = filteredTools.filter(t => t.type === type.id);
-            if (typeItems.length === 0) return null;
-            return (
-              <div key={type.id}>
-                <div className="sidebar-group-title">{type.label}</div>
-                {navGroups.map(grp => {
-                  const items = typeItems.filter(t => t.group === grp);
-                  if (items.length === 0) return null;
-                  return (
-                    <div key={grp}>
-                      <div className="sidebar-section">{grp}</div>
-                      {items.map(t => (
-                        <div key={t.id} className={`nav-item ${activeTool === t.id ? 'active' : ''}`} onClick={() => setActiveTool(t.id)}>
-                          <div className="nav-dot" />
-                          {t.label}
-                        </div>
-                      ))}
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
+          <div className="sidebar-nav">
+            {navTypes.map(type => {
+              const typeItems = filteredTools.filter(t => t.type === type.id);
+              if (typeItems.length === 0) return null;
+              return (
+                <div key={type.id}>
+                  <div className="sidebar-group-title">{type.label}</div>
+                  {navGroups.map(grp => {
+                    const items = typeItems.filter(t => t.group === grp);
+                    if (items.length === 0) return null;
+                    return (
+                      <div key={grp}>
+                        <div className="sidebar-section">{grp}</div>
+                        {items.map(t => (
+                          <div key={t.id} className={`nav-item ${activeTool === t.id ? 'active' : ''}`} onClick={() => { setActiveTool(t.id); setIsSidebarOpen(false); }}>
+                            <div className="nav-dot" />
+                            {t.label}
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
 
-          {filteredTools.length === 0 && (
-            <div style={{padding:20, textAlign:'center', color:'var(--dim)', fontSize:12}}>No results found</div>
-          )}
+            {filteredTools.length === 0 && (
+              <div style={{padding:20, textAlign:'center', color:'var(--dim)', fontSize:12}}>No results found</div>
+            )}
+          </div>
         </aside>
 
         <main className="main">

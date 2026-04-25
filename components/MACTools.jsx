@@ -61,7 +61,7 @@ function MACTools() {
       </div>
       {result && (
         <div className="card fadein">
-          <div className="result-grid">
+          <div className="result-grid grid-mobile-1">
             <ResultItem label="Canonical (IEEE)" value={result.formatted} accent />
             <ResultItem label="Cisco Format" value={result.cisco} />
             <ResultItem label="OUI (Vendor Prefix)" value={result.oui} />
@@ -71,18 +71,18 @@ function MACTools() {
             <ResultItem label="Locally Administered" value={result.isLocallyAdministered ? 'Yes (LAA)' : 'No (UAA)'} yellow={result.isLocallyAdministered} />
           </div>
           <div className="card-title" style={{marginTop:16}}>IPv6 Link-Local (EUI-64)</div>
-          <div className="result-grid">
+          <div className="result-grid grid-mobile-1">
             <ResultItem label="EUI-64 Interface ID" value={result.eui64} />
             <ResultItem label="Link-Local Address" value={result.linkLocal} accent />
           </div>
           <div style={{background:'var(--panel)',border:'1px solid var(--border)',borderRadius:'var(--radius)',padding:'10px 14px',marginTop:12}}>
-            <div className="hint" style={{marginBottom:4}}>EUI-64 construction: Insert FF:FE after OUI, flip Universal/Local bit (bit 7 of first octet)</div>
-            <div style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--text)',letterSpacing:1}}>
+            <div className="hint" style={{marginBottom:8}}>EUI-64 construction: Insert FF:FE after OUI, flip Universal/Local bit (bit 7 of first octet)</div>
+            <div style={{fontFamily:'var(--mono)',fontSize:11,color:'var(--text)',letterSpacing:1, display:'flex', flexWrap:'wrap', gap:'4px 0', wordBreak:'break-all'}}>
               {result.binary.split(':').map((oct, i) => (
-                <span key={i}>
+                <span key={i} style={{display:'inline-block'}}>
                   {i === 0 ? oct.split('').map((b,bi) => <span key={bi} style={{color: bi===6?'var(--yellow)':b==='1'?'var(--cyan)':'var(--dim)'}}>{b}</span>) :
                     oct.split('').map((b,bi) => <span key={bi} style={{color:b==='1'?'var(--cyan)':'var(--dim)'}}>{b}</span>)}
-                  {i < 5 && <span style={{color:'var(--border)'}}>:</span>}
+                  {i < 5 && <span style={{color:'var(--border)', margin:'0 2px'}}>:</span>}
                 </span>
               ))}
             </div>

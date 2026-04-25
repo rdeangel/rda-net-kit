@@ -51,7 +51,7 @@ function RemoteDiagnostics() {
         </div>
       </div>
 
-      <div className="two-col">
+      <div className="two-col grid-mobile-1">
         <div className="card">
           <div className="card-title">Local Web Latency</div>
           {results.local ? (

@@ -69,7 +69,7 @@ function PortReference() {
       </div>
 
       <div className="card fadein" style={{padding:0,overflow:'hidden'}}>
-        <div className="table-wrap" style={{maxHeight:'calc(100vh - 280px)',overflowY:'auto'}}>
+        <div className="table-wrap hide-mobile" style={{maxHeight:'calc(100vh - 280px)',overflowY:'auto'}}>
           {activeTab === 'ports' && (
             <table>
               <thead><tr><th>Port</th><th>Transport</th><th>Service</th><th>Description</th><th></th></tr></thead>
@@ -102,6 +102,52 @@ function PortReference() {
               </tbody>
             </table>
           )}
+        </div>
+
+        {/* Mobile View */}
+        <div className="show-mobile mobile-cards" style={{padding:16, maxHeight:'calc(100vh - 280px)', overflowY:'auto'}}>
+          {activeTab === 'ports' && filteredPorts.map(p => (
+            <div key={`${p.port}-${p.proto}`} className="mobile-card">
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">Port</span>
+                <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{p.port} ({p.proto})</span>
+              </div>
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">Service</span>
+                <span className="mobile-card-value" style={{color:categoryColor(p.service)}}>{p.service}</span>
+              </div>
+              <div className="mobile-card-row" style={{flexDirection:'column', alignItems:'flex-start', borderBottom:'none'}}>
+                <span className="mobile-card-label" style={{marginBottom:4}}>Description</span>
+                <span className="mobile-card-value" style={{textAlign:'left', paddingLeft:0, color:'var(--muted)', fontSize:11}}>{p.desc}</span>
+              </div>
+              <div style={{marginTop:8, display:'flex', justifyContent:'flex-end'}}>
+                <CopyBtn text={String(p.port)} label="Copy Port" />
+              </div>
+            </div>
+          ))}
+          {activeTab === 'protocols' && filteredProtocols.map(p => (
+            <div key={p.num} className="mobile-card">
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">ID #</span>
+                <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{p.num}</span>
+              </div>
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">Protocol</span>
+                <span className="mobile-card-value" style={{color:'var(--green)', fontWeight:600}}>{p.name}</span>
+              </div>
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">RFC</span>
+                <span className="mobile-card-value"><RFCLink rfc={p.rfc} /></span>
+              </div>
+              <div className="mobile-card-row" style={{flexDirection:'column', alignItems:'flex-start', borderBottom:'none'}}>
+                <span className="mobile-card-label" style={{marginBottom:4}}>Description</span>
+                <span className="mobile-card-value" style={{textAlign:'left', paddingLeft:0, color:'var(--muted)', fontSize:11}}>{p.desc}</span>
+              </div>
+              <div style={{marginTop:8, display:'flex', justifyContent:'flex-end'}}>
+                <CopyBtn text={String(p.num)} label="Copy ID" />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

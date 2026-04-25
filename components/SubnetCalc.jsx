@@ -52,7 +52,7 @@ function SubnetCalc({ onShare }) {
         <>
           <div className="card fadein">
             <div className="card-title">Results — {result.sn.cidr}</div>
-            <div className="result-grid">
+            <div className="result-grid grid-mobile-1">
               <ResultItem label="Network Address" value={result.sn.networkStr} accent />
               <ResultItem label="Broadcast Address" value={result.sn.broadcastStr} red />
               <ResultItem label="Subnet Mask" value={result.sn.maskStr} />
@@ -70,7 +70,7 @@ function SubnetCalc({ onShare }) {
 
           <div className="card">
             <div className="card-title">IP Representations — {result.inputIP}</div>
-            <div className="result-grid">
+            <div className="result-grid grid-mobile-1">
               <ResultItem label="Dotted Decimal" value={result.inputIP} />
               <ResultItem label="Binary" value={IPv4.toBinary(IPv4.parseCIDR(input)?.ip || 0)} />
               <ResultItem label="Hexadecimal" value={IPv4.toHex(IPv4.parseCIDR(input)?.ip || 0)} />

@@ -5,7 +5,7 @@ function IPv6Transition() {
     <div className="fadein">
       <div className="card">
         <div className="card-title">Transition Technologies Cheat Sheet</div>
-        <div className="result-grid" style={{gap:16}}>
+        <div className="result-grid grid-mobile-1" style={{gap:16}}>
           <div style={{background:'var(--panel)', padding:16, borderRadius:8, borderLeft:'4px solid var(--cyan)'}}>
             <strong style={{color:'var(--cyan)', fontSize:14}}>Dual-Stack</strong>
             <p style={{fontSize:11, color:'var(--muted)', marginTop:6, lineHeight:1.4}}>Nodes run IPv4 and IPv6 simultaneously. Most common and preferred method. Requires global addresses for both protocol stacks.</p>
@@ -35,7 +35,7 @@ function IPv6Transition() {
 
       <div className="card">
         <div className="card-title">Transition Mechanics Comparison</div>
-        <div className="table-wrap">
+        <div className="table-wrap hide-mobile">
           <table>
             <thead>
               <tr>
@@ -85,9 +85,31 @@ function IPv6Transition() {
             </tbody>
           </table>
         </div>
+        {/* Mobile View */}
+        <div className="show-mobile mobile-cards">
+          {[
+            {m:'Dual-Stack', t:'Native', s:'N/A', c:'badge-cyan'},
+            {m:'NAT64/DNS64', t:'Translation', s:'Stateful', c:'badge-green'},
+            {m:'464XLAT', t:'Translation', s:'Stateful', c:'badge-yellow'},
+            {m:'DS-Lite', t:'Tunneling', s:'Stateful', c:'badge-blue'},
+            {m:'MAP-E/T', t:'Trans', s:'Stateless', c:'badge-red'},
+            {m:'6in4', t:'Tunneling', s:'Static', c:'badge-purple'}
+          ].map(v => (
+            <div key={v.m} className="mobile-card">
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">Mechanism</span>
+                <span className={`badge ${v.c}`}>{v.m}</span>
+              </div>
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">Type / State</span>
+                <span className="mobile-card-value">{v.t} / {v.s}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="two-col">
+      <div className="two-col grid-mobile-1">
         <div className="card">
           <div className="card-title">Flow Visualization: NAT64</div>
           <div style={{fontFamily:'var(--mono)', fontSize:11, padding:15, background:'var(--panel)', border:'1px solid var(--border)', borderRadius:8, color:'var(--dim)'}}>
@@ -127,7 +149,7 @@ function IPv6Transition() {
 
       <div className="card">
         <div className="card-title">Terminology Reference</div>
-        <div className="result-grid" style={{gap:20}}>
+        <div className="result-grid grid-mobile-1" style={{gap:20}}>
           <div>
             <div style={{fontSize:12, fontWeight:600, color:'var(--cyan)', marginBottom:4}}>B4 (Basic Bridging BroadBand)</div>
             <p style={{fontSize:11, color:'var(--muted)'}}>The customer-side device (CPE) that encapsulates IPv4 traffic inside an IPv6 tunnel for transmission to the ISP.</p>

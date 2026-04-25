@@ -188,36 +188,36 @@ function NetworkArcade() {
   return (
     <div className="fadein">
       <div className="card arcade-card" ref={gameAreaRef} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerCancel} style={{
-        position: "relative", overflow: "hidden", minHeight: 750, background: "#050508",
+        position: "relative", overflow: "hidden", minHeight: window.innerWidth < 768 ? 480 : 750, background: "#050508",
         border: "6px solid #1a1a2e", borderRadius: 20, display: "flex", flexDirection: "column",
         userSelect: "none", touchAction: "none"
       }}>
-        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", padding: "15px 30px", background: "#11111f", color: "#00ffff", fontFamily: "var(--mono)", borderBottom: "3px solid #222"}}>
+        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center", padding: window.innerWidth < 768 ? "10px 15px" : "15px 30px", background: "#11111f", color: "#00ffff", fontFamily: "var(--mono)", borderBottom: "3px solid #222"}}>
           <div>
-            <div style={{fontSize: 10, color: "var(--muted)", marginBottom: 2}}>LEVEL {level} • INFRASTRUCTURE ENGINE</div>
-            <div style={{fontSize: 24, fontWeight: 900, textShadow: "0 0 15px #00ffff"}}>SCORE: {score.toString().padStart(6, "0")}</div>
+            <div style={{fontSize: 8, color: "var(--muted)", marginBottom: 2}}>LEVEL {level}</div>
+            <div style={{fontSize: window.innerWidth < 768 ? 16 : 24, fontWeight: 900, textShadow: "0 0 15px #00ffff"}}>SCORE: {score.toString().padStart(6, "0")}</div>
           </div>
-          <div style={{display: "flex", alignItems: "center", gap: 30}}>
+          <div style={{display: "flex", alignItems: "center", gap: window.innerWidth < 768 ? 10 : 30}}>
             <div style={{textAlign: "right"}}>
-              <div style={{fontSize: 10, color: "var(--muted)", marginBottom: 2}}>UPTIME STABILITY</div>
-              <div style={{fontSize: 22, color: "#ff3300", letterSpacing: 3}}>{"▮".repeat(Math.max(0, lives))}{"▯".repeat(Math.max(0, 5-lives))}</div>
+              <div style={{fontSize: 8, color: "var(--muted)", marginBottom: 2}}>UPTIME</div>
+              <div style={{fontSize: window.innerWidth < 768 ? 14 : 22, color: "#ff3300", letterSpacing: 2}}>{"▮".repeat(Math.max(0, lives))}{"▯".repeat(Math.max(0, 5-lives))}</div>
             </div>
-            <button className="btn btn-ghost btn-sm" onClick={toggleFullscreen} style={{fontSize: 11, padding: "8px 14px", border: "1px solid #333", borderRadius: 4, color:"#00ffff"}}>
-              [ FULLSCREEN ]
+            <button className="btn btn-ghost btn-sm" onClick={toggleFullscreen} style={{fontSize: 9, padding: "4px 8px", border: "1px solid #333", borderRadius: 4, color:"#00ffff"}}>
+              [ FULL ]
             </button>
           </div>
         </div>
 
         {gameState === "start" && (
-          <div style={{flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#fff", textAlign: "center", padding: 40}}>
-            <div style={{background: "rgba(0,255,255,0.05)", padding: 40, borderRadius: "50%", border: "1px solid rgba(0,255,255,0.2)", marginBottom: 20, boxShadow: "0 0 80px rgba(0,255,255,0.15)"}}>
-               <div style={{fontSize: 72, fontWeight: 900, color: "#00ffff", textShadow: "0 0 40px #00ffff", letterSpacing: "-3px"}}>PACKET RAIN</div>
+          <div style={{flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#fff", textAlign: "center", padding: 20}}>
+            <div style={{background: "rgba(0,255,255,0.05)", padding: window.innerWidth < 768 ? 20 : 40, borderRadius: "50%", border: "1px solid rgba(0,255,255,0.2)", marginBottom: 20, boxShadow: "0 0 80px rgba(0,255,255,0.15)"}}>
+               <div style={{fontSize: window.innerWidth < 768 ? 32 : 72, fontWeight: 900, color: "#00ffff", textShadow: "0 0 40px #00ffff", letterSpacing: "-1px"}}>PACKET RAIN</div>
             </div>
-            <p style={{color: "var(--muted)", maxWidth: 500, fontSize: 18, lineHeight: 1.7, marginBottom: 50}}>
+            <p style={{color: "var(--muted)", maxWidth: 500, fontSize: window.innerWidth < 768 ? 14 : 18, lineHeight: 1.5, marginBottom: 30}}>
               Match technical headers to the correct neon ports. <br/>
               <strong>Identify</strong> the value and drag to the matching bucket.
             </p>
-            <button className="btn btn-primary btn-lg" onClick={startGame} style={{padding: "25px 90px", fontSize: 28, fontWeight: 800, borderRadius: 50, background: "#00ffff", color: "#000", boxShadow: "0 10px 50px rgba(0,255,255,0.4)"}}>INITIALIZE ENGINE</button>
+            <button className="btn btn-primary btn-lg" onClick={startGame} style={{padding: window.innerWidth < 768 ? "15px 40px" : "25px 90px", fontSize: window.innerWidth < 768 ? 18 : 28, fontWeight: 800, borderRadius: 50, background: "#00ffff", color: "#000", boxShadow: "0 10px 50px rgba(0,255,255,0.4)"}}>INITIALIZE ENGINE</button>
           </div>
         )}
 
@@ -235,7 +235,7 @@ function NetworkArcade() {
                   position: "absolute", left: `${p.x}%`, top: p.y, transform: "translate(-50%, -50%)",
                   background: isDragged ? "#222228" : "#11111a",
                   border: isDragged ? "2px solid #888" : "1px solid #444",
-                  padding: "6px 12px", borderRadius: 8, fontSize: 11, fontWeight: 900, fontFamily: "var(--mono)",
+                  padding: "4px 8px", borderRadius: 8, fontSize: window.innerWidth < 768 ? 9 : 11, fontWeight: 900, fontFamily: "var(--mono)",
                   color: isDragged ? "#ddd" : "#fff",
                   boxShadow: isDragged ? "0 0 25px rgba(180,180,180,0.25)" : "0 4px 8px rgba(0,0,0,0.5)",
                   cursor: "grab", zIndex: isDragged ? 100 : 10,
@@ -251,29 +251,29 @@ function NetworkArcade() {
             <div style={{position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 20}}>
               {/* Hard bar — the kill zone, above the buckets */}
               <div style={{
-                height: 6,
+                height: 4,
                 background: "#ff3300",
                 boxShadow: "0 -4px 20px rgba(255,51,0,0.4), 0 2px 6px rgba(255,51,0,0.6)"
               }}>
               </div>
               {/* Bucket row — all 8 categories always visible */}
-              <div style={{display: "flex", padding: "0 2px", background: "#0a0a10"}}>
+              <div style={{display: "flex", padding: "0 1px", background: "#0a0a10"}}>
                 {ALL_CATEGORIES.map(cat => {
                   const isHovered = hoveredPort === cat.id;
                   return (
                     <div key={cat.id} style={{
                       flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                      position: "relative", padding: "4px 2px"
+                      position: "relative", padding: "2px 1px"
                     }}>
                       <div style={{
-                        width: "100%", height: 55, background: isHovered ? cat.color : "#0e0e18",
-                        border: `2px solid ${cat.color}`, borderRadius: 6,
+                        width: "100%", height: window.innerWidth < 768 ? 40 : 55, background: isHovered ? cat.color : "#0e0e18",
+                        border: `1px solid ${cat.color}`, borderRadius: 4,
                         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                         boxShadow: isHovered ? `0 0 30px ${cat.color}` : `0 0 8px ${cat.color}22`,
                         transition: "all 0.2s ease-out"
                       }}>
-                         <div style={{fontSize: 11, fontWeight: 900, color: isHovered ? "#000" : cat.color, textShadow: isHovered ? "none" : `0 0 8px ${cat.color}aa`}}>{cat.label}</div>
-                         <div style={{fontSize: 7, color: isHovered ? "#000" : "#888", textTransform: "uppercase", fontWeight: 700, marginTop:1}}>{cat.desc}</div>
+                         <div style={{fontSize: window.innerWidth < 768 ? 7 : 11, fontWeight: 900, color: isHovered ? "#000" : cat.color, textShadow: isHovered ? "none" : `0 0 8px ${cat.color}aa`, textAlign:'center', lineHeight:1}}>{window.innerWidth < 768 ? cat.label.slice(0,5) : cat.label}</div>
+                         <div style={{fontSize: 6, color: isHovered ? "#000" : "#888", textTransform: "uppercase", fontWeight: 700, marginTop:1, display: window.innerWidth < 768 ? 'none' : 'block'}}>{cat.desc}</div>
                       </div>
                     </div>
                   );
@@ -284,11 +284,11 @@ function NetworkArcade() {
         )}
 
         {gameState === "end" && (
-          <div style={{flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#fff", textAlign: "center"}}>
-            <div style={{fontSize: 82, fontWeight: 900, color: "#ff3300", marginBottom: 10, textShadow: "0 0 40px rgba(255,51,0,0.6)"}}>BUFFER OVERFLOW</div>
-            <div style={{fontSize: 26, color: "var(--muted)", marginBottom: 10, fontFamily: "var(--mono)", letterSpacing: 4}}>LEVEL {level} • DATA CORRUPTED</div>
-            <div style={{fontSize: 36, fontWeight: 700, marginBottom: 50, color: "#00ffff"}}>FINAL_SCORE: {score}</div>
-            <button className="btn btn-primary btn-lg" onClick={startGame} style={{padding: "25px 100px", borderRadius: 50, fontSize: 22, background:"#00ffff", color:"#000"}}>REBOOT SYSTEM</button>
+          <div style={{flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#fff", textAlign: "center", padding: 20}}>
+            <div style={{fontSize: window.innerWidth < 768 ? 32 : 82, fontWeight: 900, color: "#ff3300", marginBottom: 10, textShadow: "0 0 40px rgba(255,51,0,0.6)"}}>BUFFER OVERFLOW</div>
+            <div style={{fontSize: window.innerWidth < 768 ? 14 : 26, color: "var(--muted)", marginBottom: 10, fontFamily: "var(--mono)", letterSpacing: 2}}>LEVEL {level} • CORRUPTED</div>
+            <div style={{fontSize: window.innerWidth < 768 ? 20 : 36, fontWeight: 700, marginBottom: 30, color: "#00ffff"}}>SCORE: {score}</div>
+            <button className="btn btn-primary btn-lg" onClick={startGame} style={{padding: window.innerWidth < 768 ? "15px 40px" : "25px 100px", borderRadius: 50, fontSize: window.innerWidth < 768 ? 16 : 22, background:"#00ffff", color:"#000"}}>REBOOT SYSTEM</button>
           </div>
         )}
 

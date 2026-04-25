@@ -75,7 +75,7 @@ function MTUCalc() {
 
       <div className="card fadein">
         <div className="card-title">MTU Budget</div>
-        <div className="result-grid">
+        <div className="result-grid grid-mobile-1">
           <ResultItem label="Base MTU"            value={`${base} B`}/>
           <ResultItem label="Total Overhead"      value={`${overhead} B`} red={overhead>0}/>
           <ResultItem label="Available Payload"   value={`${payload} B`} accent/>
@@ -85,7 +85,7 @@ function MTUCalc() {
         {active.length>0 && (
           <div style={{marginTop:16}}>
             <div className="label" style={{marginBottom:8}}>Overhead Breakdown</div>
-            <div className="table-wrap"><table>
+            <div className="table-wrap hide-mobile"><table>
               <thead><tr><th>Layer</th><th>Standard</th><th>Overhead</th><th>Running MTU</th></tr></thead>
               <tbody>
                 <tr><td>Base</td><td>—</td><td>—</td><td style={{fontFamily:'var(--mono)',color:'var(--cyan)'}}>{base} B</td></tr>
@@ -102,6 +102,30 @@ function MTUCalc() {
                 })}
               </tbody>
             </table></div>
+            {/* Mobile View */}
+            <div className="show-mobile mobile-cards">
+              <div className="mobile-card">
+                <div className="mobile-card-row">
+                  <span className="mobile-card-label">Base</span>
+                  <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{base} B</span>
+                </div>
+              </div>
+              {active.map((e,i) => {
+                const run=base-active.slice(0,i+1).reduce((s,x)=>s+x.bytes,0);
+                return (
+                  <div key={e.key} className="mobile-card">
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">{e.label}</span>
+                      <span className="mobile-card-value" style={{color:'var(--red)'}}>-{e.bytes} B</span>
+                    </div>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">Running MTU</span>
+                      <span className="mobile-card-value" style={{color:run<576?'var(--red)':run<1280?'var(--yellow)':'var(--cyan)', fontWeight:600}}>{run} B</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
 

@@ -86,7 +86,8 @@ function DHCPPlanner() {
     <div className="fadein">
       <div className="card">
         <div className="card-title">Subnet & Pool</div>
-        <div className="two-col" style={{gap:20}}>
+        <div className="two-col grid-mobile-1"
+ style={{gap:20}}>
           <div className="field">
             <label className="label">Network (CIDR)</label>
             <div className="input-row">
@@ -101,7 +102,8 @@ function DHCPPlanner() {
             <input className="input" value={poolName} onChange={e=>setPoolName(e.target.value)} placeholder="LAN_POOL"/>
           </div>
         </div>
-        <div className="two-col" style={{gap:20,marginTop:12}}>
+        <div className="two-col grid-mobile-1"
+ style={{gap:20,marginTop:12}}>
           <div className="field">
             <label className="label">Exclude from START of range</label>
             <input className="input" type="number" min="0" value={excludeStart} onChange={e=>setExcludeStart(e.target.value)} placeholder="10"/>
@@ -117,7 +119,8 @@ function DHCPPlanner() {
 
       <div className="card">
         <div className="card-title">DHCP Options</div>
-        <div className="two-col" style={{gap:20}}>
+        <div className="two-col grid-mobile-1"
+ style={{gap:20}}>
           <div className="field">
             <label className="label">Primary DNS</label>
             <input className="input" value={dnsServer} onChange={e=>setDnsServer(e.target.value)} placeholder="8.8.8.8"/>
@@ -146,7 +149,7 @@ function DHCPPlanner() {
         <div className="fadein">
           <div className="card">
             <div className="card-title">Scope Summary</div>
-            <div className="result-grid">
+            <div className="result-grid grid-mobile-1">
               <ResultItem label="Network"          value={`${result.network}/${result.prefix}`}/>
               <ResultItem label="Subnet Mask"      value={result.subnetMask}/>
               <ResultItem label="Default Gateway"  value={result.defaultGw} accent/>
@@ -167,7 +170,7 @@ function DHCPPlanner() {
 
           <div className="card">
             <div className="card-title">Lease Duration Guide</div>
-            <div className="table-wrap"><table>
+            <div className="table-wrap hide-mobile"><table>
               <thead><tr><th>Environment</th><th>Recommended Lease</th><th>Rationale</th></tr></thead>
               <tbody>
                 {[
@@ -187,6 +190,28 @@ function DHCPPlanner() {
                 ))}
               </tbody>
             </table></div>
+            {/* Mobile View */}
+            <div className="show-mobile mobile-cards">
+              {[
+                ['Corporate LAN', '8h – 3d', 'Stable device count'],
+                ['Wireless / Guest', '1h – 8h', 'High churn, pool reuse'],
+                ['Data Centre', 'Infinite', 'Reservations preferred'],
+                ['VoIP phones', '1h – 4h', 'Firmware updates'],
+                ['IoT devices', '24h', 'Low mobility'],
+                ['High-density', '30m – 2h', 'Max pool reuse'],
+                ['Branch WAN', '2d – 7d', 'Save renewal traffic'],
+              ].map(([env, rec, rat]) => (
+                <div key={env} className="mobile-card">
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">{env}</span>
+                    <span className="mobile-card-value" style={{color:'var(--cyan)', fontWeight:600}}>{rec}</span>
+                  </div>
+                  <div className="mobile-card-row" style={{borderBottom:'none'}}>
+                    <span className="mobile-card-value" style={{textAlign:'left', paddingLeft:0, color:'var(--muted)', fontSize:11}}>{rat}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="card">

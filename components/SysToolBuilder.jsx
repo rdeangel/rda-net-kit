@@ -470,15 +470,15 @@ function SysToolBuilder() {
         </div>
       </div>
 
-      <div style={{display:'grid', gridTemplateColumns:'240px 1fr', gap:16, minHeight:500}}>
+      <div className="grid-mobile-1" style={{display:'grid', gridTemplateColumns:'240px 1fr', gap:16}}>
         {/* Sidebar: Tool Selection */}
-        <div className="card" style={{padding:12}}>
-          <div className="card-title" style={{fontSize:10, marginBottom:8}}>Select Utility</div>
-          <div style={{display:'flex', flexDirection:'column', gap:2}}>
+        <div className="card" style={{padding:12, overflow:'hidden', minHeight:0}}>
+          <div className="card-title hide-mobile" style={{fontSize:10, marginBottom:8}}>Select Utility</div>
+          <div className="mobile-scroll-row" style={{display:'flex', flexDirection:'column', gap:2}}>
             {Object.keys(tools).map(id => (
               <div key={id}
                    className={`nav-item ${toolId===id?'active':''}`}
-                   style={{margin:0, padding:'8px 10px', height: 'auto'}}
+                   style={{margin:0, padding:'8px 10px', height: 'auto', flexShrink:0, borderRadius:6}}
                    onClick={() => {
                      setToolId(id);
                      const defs = {};
@@ -487,9 +487,9 @@ function SysToolBuilder() {
                      if (id === 'curl' || id === 'wget') setTarget('https://example.com/file');
                      else if (id === 'hping3' || id === 'iperf3' || id === 'tracert' || id === 'ping') setTarget('1.2.3.4');
                    }}>
-                <div style={{display:'flex', flexDirection:'column'}}>
-                  <span style={{fontWeight:600}}>{tools[id].name}</span>
-                  <span style={{fontSize:10, opacity:0.7, whiteSpace:'normal', lineHeight:'1.3'}}>{tools[id].desc}</span>
+                <div style={{display:'flex', flexDirection:'column', minWidth:80}}>
+                  <span style={{fontWeight:600, fontSize:12}}>{tools[id].name}</span>
+                  <span className="hide-mobile" style={{fontSize:10, opacity:0.7, whiteSpace:'normal', lineHeight:'1.3'}}>{tools[id].desc}</span>
                 </div>
               </div>
             ))}
@@ -497,7 +497,7 @@ function SysToolBuilder() {
         </div>
 
         {/* Main: Configuration */}
-        <div style={{display:'flex', flexDirection:'column', gap:16}}>
+        <div style={{display:'flex', flexDirection:'column', gap:16, minWidth:0}}>
           <div className="card" style={{flex:1}}>
             <div className="card-title">Options for {tool.name}</div>
 
@@ -564,7 +564,7 @@ function SysToolBuilder() {
             {tool.params && (
               <div>
                 <div className="label" style={{marginBottom:10}}>Parameters</div>
-                <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12}}>
+                <div className="grid-mobile-1" style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12}}>
                   {tool.params.map(p => (
                     <div key={p.key} className="field" style={{marginBottom:0}}>
                       <div style={{display:'flex', justifyContent:'space-between', marginBottom:4}}>
@@ -590,7 +590,7 @@ function SysToolBuilder() {
                   {copied === 'cmd' ? 'Copied!' : 'Copy to Clipboard'}
                 </button>
              </div>
-             <div style={{padding:20, fontFamily:'var(--mono)', fontSize:15, lineHeight:1.5, color:'var(--text)', position:'relative'}}>
+             <div style={{padding:20, fontFamily:'var(--mono)', fontSize:15, lineHeight:1.5, color:'var(--text)', position:'relative', wordBreak:'break-all'}}>
                 <span style={{color:'var(--green)'}}>$</span> {currentCmd}
                 <div style={{marginTop:12, paddingTop:12, borderTop:'1px dashed var(--border)', fontSize:12, color:'var(--muted)'}}>
                    # {tool.desc}
@@ -599,6 +599,18 @@ function SysToolBuilder() {
           </div>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          .mobile-scroll-row {
+            flex-direction: row !important;
+            overflow-x: auto;
+            padding-bottom: 8px;
+          }
+          .nav-item.active {
+            border-bottom: 2px solid var(--cyan);
+          }
+        }
+      `}</style>
     </div>
   );
 }

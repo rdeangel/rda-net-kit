@@ -54,7 +54,7 @@ function OverlapDetector() {
                 ? <span className="badge badge-green">✓ No overlaps detected</span>
                 : <span className="badge badge-red">⚠ {result.conflicts.length} overlap{result.conflicts.length>1?'s':''} found</span>}
             </div>
-            <div className="table-wrap">
+            <div className="table-wrap hide-mobile">
               <table><thead><tr><th>CIDR</th><th>Network</th><th>Broadcast</th><th>Hosts</th><th>Status</th></tr></thead>
               <tbody>{result.networks.map((n,i) => (
                 <tr key={i} style={result.flagged.has(i)?{background:'rgba(239,68,68,.06)'}:{}}>
@@ -63,6 +63,25 @@ function OverlapDetector() {
                   <td>{result.flagged.has(i) ? <span className="badge badge-red">⚠ Conflict</span> : <span className="badge badge-green">✓ OK</span>}</td>
                 </tr>
               ))}</tbody></table>
+            </div>
+            {/* Mobile View */}
+            <div className="show-mobile mobile-cards">
+              {result.networks.map((n,i) => (
+                <div key={i} className="mobile-card" style={{borderLeft: result.flagged.has(i) ? '3px solid var(--red)' : '3px solid var(--green)'}}>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">CIDR</span>
+                    <span className="mobile-card-value" style={{color: result.flagged.has(i)?'var(--red)':'var(--cyan)', fontWeight:600}}>{n.cidr}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Range</span>
+                    <span className="mobile-card-value" style={{fontSize:11}}>{n.networkStr} - {n.broadcastStr}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">Hosts / Status</span>
+                    <span className="mobile-card-value">{n.hostCount} / {result.flagged.has(i) ? <span style={{color:'var(--red)'}}>Conflict</span> : <span style={{color:'var(--green)'}}>OK</span>}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
           {result.conflicts.length > 0 && (

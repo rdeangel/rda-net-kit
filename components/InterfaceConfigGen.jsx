@@ -111,10 +111,11 @@ function InterfaceConfigGen() {
           and VLANs.
         </div>
 
-        <div className="two-col">
+        <div className="two-col grid-mobile-1">
           {/* LEFT: Inputs */}
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div
+              className="grid-mobile-1"
               style={{
                 display: "grid",
                 gridTemplateColumns: "2fr 1fr 1fr",
@@ -151,6 +152,7 @@ function InterfaceConfigGen() {
             </div>
 
             <div
+              className="grid-mobile-1"
               style={{
                 display: "grid",
                 gridTemplateColumns: "2fr 1fr 1fr",
@@ -230,6 +232,7 @@ function InterfaceConfigGen() {
                 Available Variables
               </div>
               <div
+                className="grid-mobile-1"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
@@ -301,7 +304,8 @@ function InterfaceConfigGen() {
                 backgroundColor: "var(--panel)",
                 color: "var(--text)",
                 border: "1px solid var(--border)",
-                whiteSpace: "pre",
+                whiteSpace: "pre-wrap",
+                wordBreak: "break-all",
                 resize: "none",
               }}
             />

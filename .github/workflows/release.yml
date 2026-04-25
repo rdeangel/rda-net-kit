@@ -47,9 +47,6 @@ jobs:
   build-docker:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -162,9 +159,8 @@ jobs:
           # Filter meta-commits
           COMMITS=$(echo "$COMMITS" | grep -ivE '\|(chore: update CHANGELOG|chore: release )' || true)
 
-          REPO_LC=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          REPO_NAME=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
+          export OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}
+          export REPO_NAME_LC=$(echo "${GITHUB_REPOSITORY#*/}" | tr '[:upper:]' '[:lower:]')
 
           # Categorize commits
           fmt() {
@@ -192,8 +188,12 @@ jobs:
           security=$(echo "$COMMITS" | grep -iE '\|(security|sec:|vulnerability|CVE)' || true)
           remaining=$(echo "$COMMITS" | grep -ivE '\|(breaking|BREAKING CHANGE|!:|security|sec:|vulnerability|CVE)' || true)
 
+          ui=$(echo "$remaining" | grep -iE '\|(feat|fix|style|refactor|update)\(ui\):' || true)
+          remaining=$(echo "$remaining" | grep -ivE '\|(feat|fix|style|refactor|update)\(ui\):' || true)
+
           fmt "⚠️ Breaking Changes" "$breaking"
           fmt "🔒 Security" "$security"
+          fmt "📱 UI & Layout" "$ui"
 
           features=$(echo "$remaining" | grep -iE '\|(feat|add)(\([^)]*\))?:' || true)
           fmt "✨ New Features" "$features"
@@ -231,12 +231,12 @@ jobs:
             echo "---"
             echo ""
             echo "## 🌐 Live Site"
-            echo "https://${OWNER}.github.io/${REPO_NAME}/"
+            echo "https://${OWNER_LC}.github.io/${REPO_NAME_LC}/"
             echo ""
             echo "## 🐳 Docker"
             echo '```'
-            echo "docker pull ${{ secrets.DOCKERHUB_USERNAME }}/rda-net-kit:${VERSION}"
-            echo "docker pull ghcr.io/${REPO_LC}:${VERSION}"
+            echo "docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${REPO_NAME_LC}:${VERSION}"
+            echo "docker pull ghcr.io/${OWNER_LC}/${REPO_NAME_LC}:${VERSION}"
             echo '```'
           } >> RELEASE_NOTES.md
 

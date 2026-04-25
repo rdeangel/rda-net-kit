@@ -15,7 +15,7 @@ function RoutingReference() {
         <div className="input-row">
           <input className="input" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search protocol or AD value..." />
         </div>
-        <div className="table-wrap" style={{marginTop:16}}>
+        <div className="table-wrap hide-mobile" style={{marginTop:16}}>
           <table>
             <thead><tr><th>AD Value</th><th>Protocol</th><th>Type</th><th>Typical Use Case</th></tr></thead>
             <tbody>
@@ -30,10 +30,28 @@ function RoutingReference() {
             </tbody>
           </table>
         </div>
+        {/* Mobile View */}
+        <div className="show-mobile mobile-cards" style={{marginTop:16}}>
+          {filtered.map(r => (
+            <div key={r.ad} className="mobile-card">
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">AD: {r.ad}</span>
+                <span className="mobile-card-value" style={{fontWeight:600, color:'var(--cyan)'}}>{r.name}</span>
+              </div>
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">Type</span>
+                <span className={`badge ${r.type==='IGP'?'badge-blue':r.type==='EGP'?'badge-purple':'badge-yellow'}`} style={{fontSize:10}}>{r.type}</span>
+              </div>
+              <div className="mobile-card-row" style={{borderBottom:'none'}}>
+                <span className="mobile-card-value" style={{textAlign:'left', paddingLeft:0, color:'var(--muted)', fontSize:11}}>{r.desc}</span>
+              </div>
+            </div>
+          ))}
+        </div>
         <div className="hint" style={{marginTop:8}}>* AD determines route trustworthiness. Lower value wins when multiple protocols offer a route to the same destination.</div>
       </div>
 
-      <div className="two-col">
+      <div className="two-col grid-mobile-1">
         <div className="card">
           <div className="card-title" style={{color:'var(--green)'}}>OSPF Deep Dive (Link-State)</div>
           <div style={{fontSize:12,color:'var(--muted)',lineHeight:1.7}}>
@@ -84,7 +102,7 @@ function RoutingReference() {
         </div>
       </div>
 
-      <div className="two-col">
+      <div className="two-col grid-mobile-1">
         <div className="card">
           <div className="card-title" style={{color:'var(--cyan)'}}>EIGRP (Advanced Dist. Vector)</div>
           <div style={{fontSize:12,color:'var(--muted)',lineHeight:1.7}}>
@@ -130,7 +148,7 @@ function RoutingReference() {
 
       <div className="card fadein">
         <div className="card-title">Default Protocol Timers & Keepalives</div>
-        <div className="table-wrap">
+        <div className="table-wrap hide-mobile">
           <table>
             <thead>
               <tr>
@@ -173,6 +191,31 @@ function RoutingReference() {
               </tr>
             </tbody>
           </table>
+        </div>
+        {/* Mobile View */}
+        <div className="show-mobile mobile-cards">
+          {[
+            {p:'OSPF', h:'10s / 30s', d:'40s / 120s', o:'Wait 40s', c:'var(--green)'},
+            {p:'EIGRP', h:'5s / 60s', d:'15s / 180s', o:'-', c:'var(--cyan)'},
+            {p:'BGP', h:'60s', d:'180s', o:'Retry 5s', c:'var(--purple)'},
+            {p:'IS-IS', h:'10s / 3s', d:'30s / 10s', o:'-', c:'var(--yellow)'},
+            {p:'RIP', h:'-', d:'180s', o:'Update 30s', c:'var(--text)'},
+          ].map(t => (
+            <div key={t.p} className="mobile-card">
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">Protocol</span>
+                <span className="mobile-card-value" style={{fontWeight:600, color:t.c}}>{t.p}</span>
+              </div>
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">Hello / Dead</span>
+                <span className="mobile-card-value">{t.h} / {t.d}</span>
+              </div>
+              <div className="mobile-card-row">
+                <span className="mobile-card-label">Other</span>
+                <span className="mobile-card-value">{t.o}</span>
+              </div>
+            </div>
+          ))}
         </div>
         <div className="hint" style={{marginTop:8}}>* Timers are defaults for Cisco IOS. Dead time is typically 3x or 4x the Hello interval.</div>
       </div>

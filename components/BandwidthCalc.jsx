@@ -97,14 +97,16 @@ function BandwidthCalc() {
           <div className="card fadein">
             <div className="card-title">Equivalents</div>
             <div style={{marginBottom:8,fontSize:11,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:'0.06em'}}>Bits per second (network)</div>
-            <div className="result-grid" style={{marginBottom:16}}>
+            <div className="result-grid grid-mobile-1"
+ style={{marginBottom:16}}>
               {units.map(u=>{
                 const v=u==='bps'?convBps:u==='Kbps'?convBps/1e3:u==='Mbps'?convBps/1e6:u==='Gbps'?convBps/1e9:convBps/1e12;
                 return <ResultItem key={u} label={u} value={v.toLocaleString(undefined,{maximumFractionDigits:6})} accent={u===bwUnit}/>;
               })}
             </div>
             <div style={{marginBottom:8,fontSize:11,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:'0.06em'}}>Bytes per second (storage / OS)</div>
-            <div className="result-grid">
+            <div className="result-grid grid-mobile-1"
+>
               <ResultItem label="B/s"   value={(convBps/8).toLocaleString(undefined,{maximumFractionDigits:2})}        accent={bwUnit==='B/s'}/>
               <ResultItem label="KB/s"  value={(convBps/8/1e3).toLocaleString(undefined,{maximumFractionDigits:4})}   accent={bwUnit==='KB/s'}/>
               <ResultItem label="MB/s"  value={(convBps/8/1e6).toLocaleString(undefined,{maximumFractionDigits:4})}   accent={bwUnit==='MB/s'}  green/>
@@ -119,7 +121,7 @@ function BandwidthCalc() {
           </div>
           <div className="card">
             <div className="card-title">Common Link Speeds</div>
-            <div className="table-wrap"><table>
+            <div className="table-wrap hide-mobile"><table>
               <thead><tr><th>Interface</th><th>Speed</th><th>Mbps</th><th>MB/s</th><th>MiB/s</th></tr></thead>
               <tbody>
                 {[['Fast Ethernet',100],['Gigabit Ethernet',1000],['10G Ethernet',10000],
@@ -136,6 +138,21 @@ function BandwidthCalc() {
                 ))}
               </tbody>
             </table></div>
+            {/* Mobile View */}
+            <div className="show-mobile mobile-cards">
+              {[['Fast Ethernet',100],['Gigabit Ethernet',1000],['10G Ethernet',10000],['T1',1.544],['OC-3',155.52]].map(([name,mbps])=>(
+                <div key={name} className="mobile-card">
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">{name}</span>
+                    <span className="mobile-card-value" style={{color:'var(--cyan)',fontWeight:600}}>{mbps>=1000?mbps/1000+'G':mbps+'M'}</span>
+                  </div>
+                  <div className="mobile-card-row">
+                    <span className="mobile-card-label">MB/s | MiB/s</span>
+                    <span className="mobile-card-value">{(mbps/8).toFixed(1)} | {(mbps*1e6/8/1048576).toFixed(1)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -144,7 +161,7 @@ function BandwidthCalc() {
         <div className="fadein">
           <div className="card">
             <div className="card-title">File Transfer Time</div>
-            <div className="two-col" style={{gap:20}}>
+            <div className="two-col grid-mobile-1" style={{gap:20}}>
               <div className="field">
                 <label className="label">File / Data Size</label>
                 <div className="input-row">
@@ -173,14 +190,15 @@ function BandwidthCalc() {
           </div>
           <div className="card fadein">
             <div className="card-title">Results</div>
-            <div className="result-grid">
+            <div className="result-grid grid-mobile-1"
+>
               <ResultItem label="Data (bits)"    value={(transferBytes*8).toLocaleString()}/>
               <ResultItem label="Speed"          value={fmtBps(transferBps)}/>
               <ResultItem label="Transfer Time"  value={fmtTime(transferSec)} accent/>
             </div>
             <div style={{marginTop:16}}>
               <div className="label" style={{marginBottom:8}}>At different link speeds</div>
-              <div className="table-wrap"><table>
+              <div className="table-wrap hide-mobile"><table>
                 <thead><tr><th>Link</th><th>100% eff.</th><th>95% eff.</th><th>70% eff.</th></tr></thead>
                 <tbody>
                   {[['T1',1.544e6],['Fast-E',100e6],['GigE',1e9],['10G',10e9],['100G',100e9],['200G',200e9],['400G',400e9],['800G',800e9]].map(([l,b])=>(
@@ -193,6 +211,21 @@ function BandwidthCalc() {
                   ))}
                 </tbody>
               </table></div>
+              {/* Mobile View */}
+              <div className="show-mobile mobile-cards">
+                {[['T1',1.544e6],['Fast-E',100e6],['GigE',1e9],['10G',10e9]].map(([l,b])=>(
+                  <div key={l} className="mobile-card">
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">{l}</span>
+                      <span className="mobile-card-value" style={{color:'var(--cyan)',fontWeight:600}}>{fmtTime(transferBytes*8/b)}</span>
+                    </div>
+                    <div className="mobile-card-row">
+                      <span className="mobile-card-label">95% | 70%</span>
+                      <span className="mobile-card-value">{fmtTime(transferBytes*8/(b*0.95))} | {fmtTime(transferBytes*8/(b*0.70))}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -216,7 +249,8 @@ function BandwidthCalc() {
           {transferBps>0&&(
             <div className="card fadein">
               <div className="card-title">Expected Transfer Rate</div>
-              <div className="result-grid">
+              <div className="result-grid grid-mobile-1"
+>
                 <ResultItem label="Theoretical Max (MB/s)"  value={(transferBps/8/1e6).toFixed(3)}   accent green/>
                 <ResultItem label="Theoretical Max (MiB/s)" value={(transferBps/8/1048576).toFixed(3)} yellow/>
                 <ResultItem label="At 95% efficiency (MB/s)" value={(transferBps*0.95/8/1e6).toFixed(3)}/>
@@ -227,7 +261,7 @@ function BandwidthCalc() {
               </div>
               <div style={{marginTop:16}}>
                 <div className="label" style={{marginBottom:8}}>Common link speeds reference</div>
-                <div className="table-wrap"><table>
+                <div className="table-wrap hide-mobile"><table>
                   <thead><tr><th>Link</th><th>Mbps</th><th>Max MB/s</th><th>Max MiB/s</th><th>Typical MB/s (~70%)</th></tr></thead>
                   <tbody>
                     {[['Fast Ethernet',100],['Gigabit Ethernet',1000],['2.5G Ethernet',2500],['10G Ethernet',10000],['25G Ethernet',25000],['100G Ethernet',100000]].map(([name,mbps])=>{
@@ -244,6 +278,21 @@ function BandwidthCalc() {
                     })}
                   </tbody>
                 </table></div>
+                {/* Mobile View */}
+                <div className="show-mobile mobile-cards">
+                  {[['Fast-E',100],['GigE',1000],['2.5G',2500],['10G',10000]].map(([name,mbps])=>(
+                    <div key={name} className="mobile-card">
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">{name}</span>
+                        <span className="mobile-card-value" style={{color:'var(--green)',fontWeight:600}}>{(mbps*1e6/8/1e6).toFixed(1)} MB/s</span>
+                      </div>
+                      <div className="mobile-card-row">
+                        <span className="mobile-card-label">Typical (70%)</span>
+                        <span className="mobile-card-value">{(mbps*1e6*0.7/8/1e6).toFixed(1)} MB/s</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -263,7 +312,8 @@ function BandwidthCalc() {
               const n=parseFloat(obsRate)||0;
               const bps=obsUnit==='B/s'?n*8:obsUnit==='KB/s'?n*8e3:obsUnit==='MB/s'?n*8e6:obsUnit==='GB/s'?n*8e9:obsUnit==='MiB/s'?n*8*1048576:obsUnit==='GiB/s'?n*8*1073741824:n*8e6;
               return (
-                <div className="result-grid" style={{marginTop:12}}>
+                <div className="result-grid grid-mobile-1"
+ style={{marginTop:12}}>
                   <ResultItem label="Implied link (100% eff.)" value={fmtBps(bps)}/>
                   <ResultItem label="Implied link (95% eff.)"  value={fmtBps(bps/0.95)}/>
                   <ResultItem label="Implied link (70% eff.)"  value={fmtBps(bps/0.70)} accent/>
@@ -279,7 +329,7 @@ function BandwidthCalc() {
           <div className="card">
             <div className="card-title">Serialization Delay</div>
             <div className="hint" style={{marginBottom:12}}>Time to put all bits of a packet on the wire — critical for QoS and latency budgets.</div>
-            <div className="two-col" style={{gap:20}}>
+            <div className="two-col grid-mobile-1" style={{gap:20}}>
               <div className="field">
                 <label className="label">Packet Size (bytes)</label>
                 <div className="input-row">
@@ -305,7 +355,8 @@ function BandwidthCalc() {
           {serialBps>0 && (
             <div className="card fadein">
               <div className="card-title">Results</div>
-              <div className="result-grid">
+              <div className="result-grid grid-mobile-1"
+>
                 <ResultItem label="Packet Size"  value={`${parseInt(pktSize)||0} bytes`}/>
                 <ResultItem label="Bits on Wire" value={`${(parseInt(pktSize)||0)*8} bits`}/>
                 <ResultItem label="Delay"        value={fmtTime(serialDelaySec)} accent/>
@@ -313,7 +364,7 @@ function BandwidthCalc() {
               </div>
               <div style={{marginTop:16}}>
                 <div className="label" style={{marginBottom:8}}>Across packet sizes</div>
-                <div className="table-wrap"><table>
+                <div className="table-wrap hide-mobile"><table>
                   <thead><tr><th>Size</th><th>Delay</th><th>Max pps @ 100%</th></tr></thead>
                   <tbody>
                     {[64,128,256,512,1024,1500,9000].map(sz=>{
@@ -329,6 +380,25 @@ function BandwidthCalc() {
                     })}
                   </tbody>
                 </table></div>
+                {/* Mobile View */}
+                <div className="show-mobile mobile-cards">
+                  {[64,512,1500,9000].map(sz=>{
+                    const d=serialBps>0?(sz*8)/serialBps:0;
+                    const mx=serialBps>0?serialBps/(sz*8):0;
+                    return (
+                      <div key={sz} className="mobile-card" style={sz===parseInt(pktSize)?{borderColor:'var(--cyan)'}:{}}>
+                        <div className="mobile-card-row">
+                          <span className="mobile-card-label">{sz} Bytes</span>
+                          <span className="mobile-card-value" style={{color:'var(--cyan)',fontWeight:600}}>{fmtTime(d)}</span>
+                        </div>
+                        <div className="mobile-card-row">
+                          <span className="mobile-card-label">Max Rate</span>
+                          <span className="mobile-card-value">{mx.toLocaleString(undefined,{maximumFractionDigits:0})} pps</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
@@ -340,7 +410,7 @@ function BandwidthCalc() {
           <div className="card">
             <div className="card-title">Link Utilization Calculator</div>
             <div className="hint" style={{marginBottom:12}}>Calculate bandwidth consumed by a traffic rate in packets per second.</div>
-            <div className="two-col" style={{gap:20}}>
+            <div className="two-col grid-mobile-1" style={{gap:20}}>
               <div className="field">
                 <label className="label">Packet Rate (pps)</label>
                 <input className="input" value={pps} onChange={e=>setPps(e.target.value)} placeholder="1000"/>
@@ -374,7 +444,8 @@ function BandwidthCalc() {
           </div>
           <div className="card fadein">
             <div className="card-title">Results</div>
-            <div className="result-grid">
+            <div className="result-grid grid-mobile-1"
+>
               <ResultItem label="Traffic Rate"   value={fmtBps(utilBps)} accent/>
               <ResultItem label="Link Capacity"  value={fmtBps(ifaceBps)}/>
               <ResultItem label="Utilization"    value={`${utilPct.toFixed(2)}%`} green={utilPct<60} yellow={utilPct>=60&&utilPct<80} red={utilPct>=80}/>
