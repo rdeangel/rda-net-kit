@@ -1,0 +1,9 @@
+*-offline.html
+*-file.html
+docs/superpowers/
+.mcp.json
+.gemini/settings.json
+ipv4-ipv6-tools-offline.html
+
+# Internal
+internal/

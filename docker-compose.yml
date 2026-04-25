@@ -1,0 +1,10 @@
+services:
+  rda-net-kit:
+    build: .
+    image: rda-net-kit:latest
+    container_name: rda-net-kit
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    restart: unless-stopped

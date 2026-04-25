@@ -1,0 +1,12 @@
+{
+  "name": "rda-net-kit",
+  "version": "1.0.0",
+  "description": "Network engineering tools built for engineers",
+  "private": true,
+  "scripts": {
+    "start": "node scripts/proxy.js",
+    "build:offline": "node scripts/bundle.js rda-net-kit.html",
+    "build:file": "node scripts/build-dev.js",
+    "postversion": "node scripts/sync-version.js && git add version.js && git commit --amend --no-edit"
+  }
+}
